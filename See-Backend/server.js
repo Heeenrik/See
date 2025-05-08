@@ -39,5 +39,5 @@ databaseConnection.connect((err) => {
 
 // API routes //
 server.get("/api/data", (req, resp) => {
-  resp.json({ message: "data from server" });
+  resp.json({ message: "Data from Server" });
 });
