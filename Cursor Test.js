@@ -19,15 +19,15 @@ const pool = mysql.createPool({
 
 // Cursor speichern und alle zurückgeben
 app.post('/update-cursor', async (req, res) => {
-  const { userId, x, y } = req.body;
+  const { User, Position_X, Position_Y } = req.body;
 
   const conn = await pool.getConnection();
   try {
     await conn.execute(`
-      INSERT INTO cursors (userId, x, y)
+      INSERT INTO cursors (User, Position_X, Position_Y)
       VALUES (?, ?, ?)
       ON DUPLICATE KEY UPDATE x = VALUES(x), y = VALUES(y), updatedAt = CURRENT_TIMESTAMP
-    `, [userId, x, y]);
+    `, [User, Position_X, Position_Y]);
 
     const [rows] = await conn.execute(`SELECT * FROM cursors`);
     res.json(rows);
