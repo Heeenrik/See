@@ -1,3 +1,8 @@
+//Cursor zeug
+document.addEventListener("mousemove", function (event) {
+  console.log("Mouse X:", event.clientX, "Mouse Y:", event.clientY);
+});
+
 // Get cursor data from database //
 const dataReq = fetch("http://localhost:3000/api/data")
   .then((resp) => {

@@ -45,7 +45,7 @@ server.get("/api/data", (req, resp) => {
   resp.json({ message: "Data from Server" });
 });
 
-// Daten in die datenbank schreiben //
+// Daten aus dem frontend in die datenbank schreiben //
 server.post("/api/cursor", (req, res) => {
   const { name, x, y } = req.body;
   databaseConnection.query(
