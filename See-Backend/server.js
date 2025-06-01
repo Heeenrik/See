@@ -114,6 +114,45 @@ server.post("/api/cursor/delete/:id", (req, res) => {
   );
 });
 
+//nachrichten schreiben und holen
+
+server.post("/api/messages", (req, res) => {
+  const { name, msg } = req.body;
+  if (!name || !msg) {
+    return res.status(400).json({
+      success: false,
+      message: "Name und Nachricht sind erforderlich.",
+    });
+  }
+
+  const sql = "INSERT INTO Flaschen (name, msg, time) VALUES (?, ?, NOW())";
+  databaseConnection.query(sql, [name, msg], (err, result) => {
+    if (err) {
+      console.error("DB-Fehler beim Speichern der Nachricht:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Fehler beim Speichern",
+      });
+    }
+    res.json({ success: true, id: result.insertId });
+  });
+});
+
+server.get("/api/messages", (req, res) => {
+  const sql =
+    "SELECT idFlaschen, name, msg, time FROM Flaschen WHERE time >= NOW() - INTERVAL 1 DAY ORDER BY time DESC";
+  databaseConnection.query(sql, (err, results) => {
+    if (err) {
+      console.error("DB-Fehler beim Abrufen der Nachrichten:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Fehler beim Abrufen",
+      });
+    }
+    res.json({ success: true, messages: results });
+  });
+});
+
 server.listen(port, () => {
   console.log("server is listening on port " + port);
 });

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nachrichtenboard</title>
+  <style>
+    #messages {
+      border: 1px solid #ccc;
+      padding: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    .message {
+      border-bottom: 1px solid #eee;
+      padding: 5px 0;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .time {
+      font-size: 0.8em;
+      color: #999;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Modal -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" id="closeModal">&times;</button>
+    <div id="modalText"></div>
+  </div>
+</div>
+
+
+  <h1>See dingsi test</h1>
+
+  <div id="messages">Lade Nachrichten...</div>
+
+  <input type="text" id="nameInput" placeholder="Dein Name" />
+  <br />
+  <textarea id="msgInput" placeholder="Deine Nachricht" rows="3" cols="40"></textarea>
+  <br />
+  <button id="sendBtn">Nachricht senden</button>
+
+
+<script>
+    const messagesDiv = document.getElementById("messages");
+    const modal = document.getElementById("modal");
+    const modalText = document.getElementById("modalText");
+    const closeModalBtn = document.getElementById("closeModal");
+
+    function loadMessages() {
+      fetch("http://localhost:3000/api/messages")
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            messagesDiv.innerHTML = "";
+            data.messages.forEach(msg => {
+              const button = document.createElement("button");
+              button.className = "msg-button";
+              // Button zeigt Name und Zeit (kurz)
+              const timeStr = new Date(msg.time).toLocaleString();
+              button.textContent = `${msg.name} (${timeStr})`;
+
+              // Klick öffnet Modal mit Nachrichtentext
+              button.addEventListener("click", () => {
+                modalText.textContent = msg.msg;
+                modal.style.display = "flex";
+              });
+
+              messagesDiv.appendChild(button);
+            });
+          } else {
+            messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
+          }
+        })
+        .catch(() => {
+          messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
+        });
+    }
+
+    // Modal schließen
+    closeModalBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    // Modal auch schließen, wenn man außerhalb klickt
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    loadMessages();
+    setInterval(loadMessages, 5000);
+
+
+
+//nachricht senden
+
+    sendBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      const msg = msgInput.value.trim();
+      if (!name || !msg) {
+        alert("Bitte Name und Nachricht eingeben.");
+        return;
+      }
+
+      fetch("http://localhost:3000/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, msg }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            msgInput.value = "";
+            loadMessages();
+          } else {
+            alert("Fehler beim Senden der Nachricht.");
+          }
+        })
+        .catch(() => {
+          alert("Fehler beim Senden der Nachricht.");
+        });
+    });
+
+</script>
+
+<style>
+  #messages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .msg-button {
+      padding: 10px 15px;
+      font-weight: bold;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      flex: 1 0 150px; /* Mindestens 150px breit, flexibel */
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Modal-Hintergrund */
+    .modal {
+      display: none; /* versteckt */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Modal-Inhalt */
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 6px;
+      max-width: 500px;
+      max-height: 70vh;
+      overflow-y: auto;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    /* Schließen-Button */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+</style>
+</body>
+</html>
