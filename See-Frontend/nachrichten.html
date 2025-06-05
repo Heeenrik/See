@@ -4,25 +4,7 @@
   <meta charset="UTF-8" />
   <title>Nachrichtenboard</title>
   <style>
-    #messages {
-      border: 1px solid #ccc;
-      padding: 10px;
-      max-height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-    .message {
-      border-bottom: 1px solid #eee;
-      padding: 5px 0;
-    }
-    .name {
-      font-weight: bold;
-    }
-    .time {
-      font-size: 0.8em;
-      color: #999;
-      margin-left: 10px;
-    }
+
   </style>
 </head>
 <body>
@@ -30,7 +12,7 @@
     <!-- Modal -->
 <div id="modal" class="modal">
   <div class="modal-content">
-    <button class="close-btn" id="closeModal">&times;</button>
+   <!-- <button class="close-btn" id="closeModal">&times;</button> -->
     <div id="modalText"></div>
   </div>
 </div>
@@ -42,9 +24,50 @@
 
   <input type="text" id="nameInput" placeholder="Dein Name" />
   <br />
-  <textarea id="msgInput" placeholder="Deine Nachricht" rows="3" cols="40"></textarea>
+  <textarea id="msgInput" placeholder="Deine Nachricht" rows="20" cols="40"></textarea>
   <br />
+
+  <label for="type">Flasche auswählen</label>
+
+
+     <select name="type" id="typeInput">>
+
+
+          <option value="fl1">PET1</option>
+          <option value="fl2">PET2</option>
+          <option value="fl3">PET3</option>
+          <option value="fl4">Glas1</option>
+          <option value="fl5">Glas2</option>
+          <option value="fl6">Glas3</option>
+
+
+     </select>
+
+  <br />
+    <label for="color">Farbe auswählen</label>
+
+
+     <select name="color" id="colorInput">>
+
+
+          <option value="cl1">schwarz</option>
+          <option value="cl2">rot</option>
+          <option value="cl3">blau</option>
+          <option value="cl4">grün</option>
+          <option value="cl5">lila</option>
+          <option value="cl6">gelb</option>
+
+
+     </select>
+
+  <br />
+<br />
   <button id="sendBtn">Nachricht senden</button>
+
+
+
+
+
 
 
 <script>
@@ -53,6 +76,8 @@
     const modalText = document.getElementById("modalText");
     const closeModalBtn = document.getElementById("closeModal");
 
+
+
     function loadMessages() {
       fetch("http://localhost:3000/api/messages")
         .then(res => res.json())
@@ -60,19 +85,42 @@
           if (data.success) {
             messagesDiv.innerHTML = "";
             data.messages.forEach(msg => {
-              const button = document.createElement("button");
-              button.className = "msg-button";
-              // Button zeigt Name und Zeit (kurz)
-              const timeStr = new Date(msg.time).toLocaleString();
-              button.textContent = `${msg.name} (${timeStr})`;
+              const img = document.createElement("img");
+  img.className = "msg-image";
 
-              // Klick öffnet Modal mit Nachrichtentext
-              button.addEventListener("click", () => {
-                modalText.textContent = msg.msg;
-                modal.style.display = "flex";
-              });
+        const typeToImage = {
+          fl1: "http://localhost:3000/flaschen/1-2.png",
+          fl2: "http://localhost:3000/flaschen/2-2.png",
+          fl3: "http://localhost:3000/flaschen/3-2.png",
+          fl4: "http://localhost:3000/flaschen/4-2.png",
+          fl5: "http://localhost:3000/flaschen/5-2.png",
+          fl6: "http://localhost:3000/flaschen/6-2.png",
+        };
 
-              messagesDiv.appendChild(button);
+        const msgCol = {
+          cl1: "rgb(50,50,50)", //schwarz
+          cl2: "rgb(200,50,50)", //rot
+          cl3: "rgb(50,50,200)", //blau
+          cl4: "rgb(50,200,50)", //grün
+          cl5: "rgb(100,50,100)", //lila
+          cl6: "rgb(20,100,100)", //gelb
+        };
+
+
+
+  img.src = typeToImage[msg.type]
+  img.alt = `${msg.name} (${new Date(msg.time).toLocaleString()})`;
+  img.title = `${msg.name} (${new Date(msg.time).toLocaleString()})`; // Tooltip
+
+  // Klick öffnet Modal mit Nachrichtentext
+  img.style.cursor = "pointer"; // Zeigt an, dass es klickbar ist
+  img.addEventListener("click", () => {
+    modalText.textContent = msg.msg;
+    modal.style.display = "flex";
+    modal.querySelector(".modal-content").style.backgroundColor = msgCol[msg.color];
+  });
+
+  messagesDiv.appendChild(img);
             });
           } else {
             messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
@@ -82,12 +130,12 @@
           messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
         });
     }
-
+/*
     // Modal schließen
     closeModalBtn.addEventListener("click", () => {
       modal.style.display = "none";
     });
-
+*/
     // Modal auch schließen, wenn man außerhalb klickt
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
@@ -105,6 +153,9 @@
     sendBtn.addEventListener("click", () => {
       const name = nameInput.value.trim();
       const msg = msgInput.value.trim();
+      const type = typeInput.value.trim();
+      const color = colorInput.value.trim();
+
       if (!name || !msg) {
         alert("Bitte Name und Nachricht eingeben.");
         return;
@@ -113,7 +164,7 @@
       fetch("http://localhost:3000/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, msg }),
+        body: JSON.stringify({ name, msg, type, color }),
       })
         .then(res => res.json())
         .then(data => {
@@ -132,12 +183,7 @@
 </script>
 
 <style>
-  #messages {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+
     .msg-button {
       padding: 10px 15px;
       font-weight: bold;
@@ -168,10 +214,9 @@
 
     /* Modal-Inhalt */
     .modal-content {
-      background-color: white;
-      padding: 20px;
+      padding: 40px;
       border-radius: 6px;
-      max-width: 500px;
+      max-width: 70vw;
       max-height: 70vh;
       overflow-y: auto;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -179,7 +224,7 @@
     }
 
     /* Schließen-Button */
-    .close-btn {
+/*    .close-btn {
       position: absolute;
       top: 10px;
       right: 15px;
@@ -188,7 +233,57 @@
       cursor: pointer;
       border: none;
       background: none;
+    } */
+
+
+    .message {
+      border-bottom: 1px solid #eee;
+      padding: 5px 0;
     }
+    .name {
+      font-weight: bold;
+    }
+    .time {
+      font-size: 0.8em;
+      color: #999;
+      margin-left: 10px;
+    }
+
+    #messages {
+  display: flex;
+  flex-wrap: nowrap;        /* Keine Zeilenumbrüche */
+  overflow-x: auto;         /* Horizontal scrollen, wenn nötig */
+  gap: 8px;                 /* Abstand zwischen Bildern */
+  padding: 10px;
+  border: 1px solid #ccc;
+  max-height: 300px;        /* Höhe anpassen, z.B. Bildhöhe + Padding */
+  scrollbar-width: thin;    /* Für Firefox: dünner Scrollbar */
+}
+
+/* Optional: Scrollbar für Webkit (Chrome, Safari) etwas schöner machen */
+#messages::-webkit-scrollbar {
+  height: 8px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.msg-image {
+  flex: 0 0 auto;           /* Bilder nicht schrumpfen lassen */
+  width: 100px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.msg-image:hover {
+  transform: scale(1.1);
+}
+
 </style>
 </body>
 </html>
