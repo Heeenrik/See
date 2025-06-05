@@ -146,6 +146,8 @@ server.post("/api/messages", (req, res) => {
   });
 });
 
+//holen
+
 server.get("/api/messages", (req, res) => {
   const sql =
     "SELECT idFlaschen, name, msg, type, color, time FROM Flaschen WHERE time >= NOW() - INTERVAL 1 DAY ORDER BY time DESC";
