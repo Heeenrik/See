@@ -13,23 +13,35 @@
 <div id="modal" class="modal" style="font-family: Helvetica;">
   <div class="modal-content">
    <!-- <button class="close-btn" id="closeModal">&times;</button> -->
-    <div id="flascheName" style="font-size: 30pt;"></div>
-    <div id="modalAbsender"></div>
-    <div id="modalZeit"></div>
-    <div id="modalIdFlaschen"></div>
-    <div id="scrollContent" style="float: right;">
-    <div id="msgBox">
-      <div id="modalText" style="padding: 0px;"></div>
-      <div id="msgGloss"></div>
+    
+    
+    
+    <div id="links">
+        <!--FLASCHEN BILD-->
+        <img id="flaschenBild" src="" alt="Flaschenbild" />
+        
     </div>
-    <div id="respDiv">
-      <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" style="flex: auto; width: 30vw; margin: 10px;"></textarea>
-      <br/>
-      <button class="respBtn" id="respBtn">ANTWORTEN</button>
-      <div id="respBox"></div>
+    
+
+    <div id="rechts">
+      <div id="flascheName" style="font-size: 30pt;"></div>
+      <div id="modalAbsender"></div>
+      <div id="modalZeit"></div>
+      <div id="modalIdFlaschen"></div>
+      <div id="scrollContent">
+        <div id="msgBox">
+          <div id="modalText" style="padding: 0px;"></div>
+        </div>
+        <div id="respDiv">
+          <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" style="flex: auto; width: 30vw; margin: 10px;"></textarea>
+          <br/>
+          <button class="respBtn" id="respBtn">ANTWORTEN</button>
+          <div id="respBox"></div>
+        </div>
     </div>
 
-    </div>
+
+      </div>
    
     
   </div>
@@ -181,12 +193,13 @@ function loadMessages() {
           img.addEventListener("click", () => {
             modalText.textContent = msg.msg;
             modalFlasche.textContent = typeToName[msg.type];
-            modalAbsender.textContent = msg.name;
+            modalAbsender.textContent = "von " + msg.name;
             modalZeit.textContent = msg.time;
             modalID.textContent = msg.idFlaschen
             modal.style.display = "flex";
             msgBox.style.backgroundColor = msgCol[msg.color] || "#fff";
             msgBox.style.color = txtCol[msg.color];
+            flaschenBild.src = typeToImage[msg.type] || "";
 
             //antworten holen
 
@@ -385,7 +398,7 @@ window.addEventListener("click", (event) => {
       top: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(255, 255, 255, 0.0);
       justify-content: center;
       align-items: center;
       
@@ -398,17 +411,30 @@ window.addEventListener("click", (event) => {
       height: 70vh;
       overflow-y: auto;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      background-color: rgb(216,216,216);
+      background-color: rgba(255, 255, 255, 0);
       position: relative;
       color: rgb(0, 0, 0);
-      
+      display: flex;
       word-wrap: break-word;
       border-radius: 40px;
+      flex-direction: row;
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px); /* Für Safari */
+    }
+
+    #links {
+      flex: 1;                 /* 1 Anteil → schmaler */
+      padding: 10px;
+    }
+
+    #rechts {
+      flex: 2;                 /* 2 Anteile → breiter */
+      padding: 10px;
     }
 
     #msgBox {
       display: block;         /* Standard-Block-Layout */
-      width: 30vw;
+      
       padding: 15px;
       margin-top: 40px;
       
@@ -417,6 +443,15 @@ window.addEventListener("click", (event) => {
       border-radius: 30px;
       font-size: 16pt;
     }
+
+
+    #flaschenBild {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
 
     #msgGloss {
       display: flex;
