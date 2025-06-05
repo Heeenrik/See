@@ -47,80 +47,6 @@ server.get("/api/data", (req, resp) => {
   resp.json({ message: "Data from Server" });
 });
 
-// POST /api/cursor - neue Zeile anlegen
-server.post("/api/cursor", (req, res) => {
-  const { name, x, y } = req.body;
-  databaseConnection.query(
-    "INSERT INTO cursors (name, x, y) VALUES (?, ?, ?)",
-    [name, x, y],
-    (err, result) => {
-      if (err) {
-        console.error("DB-Fehler:", err);
-        res.status(500).json({
-          error: "Fehler beim Schreiben in die Datenbank",
-          details: err,
-        });
-      } else {
-        res.json({ success: true, id: result.insertId });
-      }
-    }
-  );
-});
-
-// PUT /api/cursor/:id - bestehende Zeile aktualisieren
-server.put("/api/cursor/:id", (req, res) => {
-  const id = req.params.id;
-  const { name, x, y } = req.body;
-
-  const sql = "UPDATE cursors SET name = ?, x = ?, y = ? WHERE id = ?";
-  databaseConnection.query(sql, [name, x, y, id], (err, result) => {
-    if (err) {
-      console.error("DB-Fehler beim Update:", err);
-      res.status(500).json({
-        error: "Fehler beim Aktualisieren der Datenbank",
-        details: err,
-      });
-    } else {
-      if (result.affectedRows === 0) {
-        res.status(404).json({
-          success: false,
-          message: "Kein Eintrag mit dieser ID gefunden",
-        });
-      } else {
-        res.json({ success: true, id: id });
-      }
-    }
-  });
-});
-
-// DELETE via POST /api/cursor/delete/:id - Eintrag löschen (für sendBeacon)
-server.post("/api/cursor/delete/:id", (req, res) => {
-  const id = req.params.id;
-
-  databaseConnection.query(
-    "DELETE FROM cursors WHERE id = ?",
-    [id],
-    (err, result) => {
-      if (err) {
-        console.error("DB-Fehler beim Löschen:", err);
-        res.status(500).json({
-          error: "Fehler beim Löschen aus der Datenbank",
-          details: err,
-        });
-      } else {
-        if (result.affectedRows === 0) {
-          res.status(404).json({
-            success: false,
-            message: "Kein Eintrag mit dieser ID gefunden",
-          });
-        } else {
-          res.json({ success: true, message: "Eintrag gelöscht" });
-        }
-      }
-    }
-  );
-});
-
 //nachrichten schreiben und holen
 
 server.post("/api/messages", (req, res) => {
@@ -150,13 +76,55 @@ server.post("/api/messages", (req, res) => {
 
 server.get("/api/messages", (req, res) => {
   const sql =
-    "SELECT idFlaschen, name, msg, type, color, time FROM Flaschen WHERE time >= NOW() - INTERVAL 1 DAY ORDER BY time DESC";
+    "SELECT idFlaschen, name, msg, type, color, time FROM Flaschen WHERE time >= NOW() - INTERVAL 3 DAY ORDER BY time DESC";
   databaseConnection.query(sql, (err, results) => {
     if (err) {
       console.error("DB-Fehler beim Abrufen der Nachrichten:", err);
       return res.status(500).json({
         success: false,
         message: "Fehler beim Abrufen",
+      });
+    }
+    res.json({ success: true, messages: results });
+  });
+});
+
+//Antworten schreiben und holen
+
+server.post("/api/responses", (req, res) => {
+  const { idParent, msgResp } = req.body;
+
+  if (!idParent || !msgResp) {
+    return res.status(400).json({
+      success: false,
+      message: "idParent und msgResp sind erforderlich.",
+    });
+  }
+
+  const sql =
+    "INSERT INTO Antworten (idParent, timeResp, msgResp) VALUES (?, NOW(), ?)";
+  databaseConnection.query(sql, [idParent, msgResp], (err, result) => {
+    if (err) {
+      console.error("DB-Fehler beim Speichern der Antwort:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Fehler beim Antworten",
+      });
+    }
+    res.json({ success: true, id: result.insertId });
+  });
+});
+
+//holen
+
+server.get("/api/responses", (req, res) => {
+  const sql = "SELECT idParent, timeResp, msgResp FROM Antworten";
+  databaseConnection.query(sql, (err, results) => {
+    if (err) {
+      console.error("DB-Fehler beim Abrufen der Antworten:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Fehler beim Abrufen der Antworten",
       });
     }
     res.json({ success: true, messages: results });
