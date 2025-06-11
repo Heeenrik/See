@@ -75,8 +75,7 @@ server.post("/api/messages", (req, res) => {
 //holen
 
 server.get("/api/messages", (req, res) => {
-  const sql =
-    "SELECT idFlaschen, name, msg, type, color, time FROM Flaschen WHERE time >= NOW() - INTERVAL 3 DAY ORDER BY time DESC";
+  const sql = "SELECT idFlaschen, name, msg, type, color, time FROM Flaschen";
   databaseConnection.query(sql, (err, results) => {
     if (err) {
       console.error("DB-Fehler beim Abrufen der Nachrichten:", err);

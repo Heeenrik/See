@@ -9,6 +9,8 @@
 </head>
 <body>
 
+
+
     <!-- Modal -->
 <div id="modal" class="modal" style="font-family: Helvetica;">
   <div class="modal-content">
@@ -36,7 +38,9 @@
           <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" style="flex: auto; width: 30vw; margin: 10px;"></textarea>
           <br/>
           <button class="respBtn" id="respBtn">ANTWORTEN</button>
+          <div id="respAbs"></div>
           <div id="respBox"></div>
+          <br/>
         </div>
     </div>
 
@@ -47,13 +51,29 @@
   </div>
 </div>
 
+<!-- Hintergrund -->
+<div id="hintergrund">
+  <video autoplay muted loop playsinline class="bg" id="bg">
+  <source src="http://localhost:3000/flaschen/wasser.mp4" type="video/mp4" />
+  Dein Browser unterstützt kein HTML5-Video.
+</video>
+<div id="land">
+  <img src="http://localhost:3000/flaschen/land.png">
+</div>
+
+<div id="schiff">
+  <img src="http://localhost:3000/schiff.png">
+</div>
+
+
+</div>
 <!-- Nachrichten reihen -->
 
-
+<div id="flaschenContainer">
   <div id="row1" class="message-row1"></div> <!-- < 1 Tag -->
   <div id="row2" class="message-row2"></div> <!-- 1–2 Tage -->
   <div id="row3" class="message-row3"></div> <!-- 2–3 Tage -->
-
+</div>
   <!-- user input -->
 </div>
 <div id="neueNachricht" class=""modal>
@@ -69,12 +89,12 @@
      <select name="type" id="typeInput">
 
 
-          <option value="fl1">PET1</option>
-          <option value="fl2">PET2</option>
-          <option value="fl3">PET3</option>
-          <option value="fl4">Glas1</option>
-          <option value="fl5">Glas2</option>
-          <option value="fl6">Glas3</option>
+          <option value="fl1">Glas1</option>
+          <option value="fl2">Glas2</option>
+          <option value="fl3">Glas3</option>
+          <option value="fl4">Plastik1</option>
+          <option value="fl5">Plastik2</option>
+          <option value="fl6">Plastik3</option>
 
 
      </select>
@@ -106,6 +126,15 @@
 <button id="neu">Neue Nachricht</button>
 
 
+<div id="archivModal" class="archivModal">
+  <div class="modal-content-archiv">
+    <button id="closeArchiv" class="close-btn">&times;</button>
+    <div id="archivGrid"></div>
+  </div>
+</div>
+
+<button id="archivOpen" class="archivOpen"> </button>
+
 
 
 
@@ -115,14 +144,31 @@
     const modal = document.getElementById("modal");
     const modalText = document.getElementById("modalText");
     const msgBox = document.getElementById("msgBox");
-    const modalAbsender = document.getElementById("modalAbsender")
-    const modalZeit = document.getElementById("modalZeit")
-    const modalFlasche = document.getElementById("flascheName")
-    const modalID = document.getElementById("modalIdFlaschen")
+    const modalAbsender = document.getElementById("modalAbsender");
+    const modalZeit = document.getElementById("modalZeit");
+    const modalFlasche = document.getElementById("flascheName");
+    const modalID = document.getElementById("modalIdFlaschen");
     const closeModalBtn = document.getElementById("closeModal");
     const neueNachricht = document.getElementById("neueNachricht");
     const openNeu = document.getElementById("neu");
-    const respBtn = document.getElementById("respBtn")
+    const respBtn = document.getElementById("respBtn");
+  
+    const schiff = document.querySelector("#schiff img");
+
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+  if (event.target === neueNachricht) {
+    neueNachricht.style.display = "none";
+  }
+  const archivModal = document.getElementById("archivModal");
+  if (event.target === archivModal) {
+    archivModal.style.display = "none";
+  }
+});
+    
 
 
 
@@ -140,6 +186,15 @@ function loadMessages() {
         document.getElementById("row3").innerHTML = ""; // 48–72h
 
         const now = new Date();
+
+        const typeToAnim = {
+          fl1: "http://localhost:3000/flaschen/anim/1-2.gif",
+          fl2: "http://localhost:3000/flaschen/anim/2-2.gif",
+          fl3: "http://localhost:3000/flaschen/anim/3-2.gif",
+          fl4: "http://localhost:3000/flaschen/anim/4-2.gif",
+          fl5: "http://localhost:3000/flaschen/anim/5-2.gif",
+          fl6: "http://localhost:3000/flaschen/anim/6-2.gif",
+        };
 
         const typeToImage = {
           fl1: "http://localhost:3000/flaschen/1-2.png",
@@ -160,21 +215,21 @@ function loadMessages() {
         };
 
         const msgCol = {
-          cl1: "rgb(40,40,40)",     // schwarz
-          cl2: "rgb(220,50,50)",    // rot
-          cl3: "rgb(55,180,220)",    // blau
-          cl4: "rgb(56,220,90)",    // grün
-          cl5: "rgb(212,55,220)",   // lila
-          cl6: "rgb(220,180,50)",    // gelb
+          cl1: "rgb(40,40,40)",       // schwarz
+          cl2: "rgb(220,50,50)",      // rot
+          cl3: "rgb(55,180,220)",     // blau
+          cl4: "rgb(56,220,90)",      // grün
+          cl5: "rgb(212,55,220)",     // lila
+          cl6: "rgb(220,180,50)",     // gelb
         };
 
         const txtCol = {
-          cl1: "rgb(255,255,255)",     // schwarz
+          cl1: "rgb(255,255,255)",    // schwarz
           cl2: "rgb(255,255,255)",    // rot
-          cl3: "rgb(0,0,0)",    // blau
-          cl4: "rgb(0,0,0)",    // grün
-          cl5: "rgb(255,255,255)",   // lila
-          cl6: "rgb(0,0,0)",    // gelb
+          cl3: "rgb(0,0,0)",          // blau
+          cl4: "rgb(0,0,0)",          // grün
+          cl5: "rgb(255,255,255)",    // lila
+          cl6: "rgb(0,0,0)",          // gelb
         };
 
         
@@ -185,7 +240,7 @@ function loadMessages() {
 
           const img = document.createElement("img");
           img.className = "msg-image";
-          img.src = typeToImage[msg.type] || "";
+          img.src = typeToAnim[msg.type] || "";
           img.alt = `${msg.name} (${time.toLocaleString()})`;
           img.title = `${msg.name} (${time.toLocaleString()})`;
           img.style.cursor = "pointer";
@@ -210,6 +265,7 @@ function loadMessages() {
 
             function loadResponses(idFlaschen) {
             const respBox = document.getElementById("respBox");
+            const respAbs = document.getElementById("respAbs");
             respBox.innerHTML = ""; // vorherige Antworten löschen
 
               fetch("http://localhost:3000/api/responses")
@@ -226,8 +282,11 @@ function loadMessages() {
                     responses.forEach(resp => {
                       const respEl = document.createElement("div");
                       respEl.className = "response";
+                      respAbs.textContent = resp.timeResp;
                       respEl.textContent = resp.msgResp;
+                      
                       respBox.appendChild(respEl);
+                      
                     });
                   } else {
                     respBox.textContent = "fehler.";
@@ -254,6 +313,7 @@ function loadMessages() {
           } else if (hoursAgo <= 72) {
             document.getElementById("row1").appendChild(img);
           }
+          
         });
       } else {
         messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
@@ -272,11 +332,6 @@ openNeu.addEventListener("click", () => {
   neueNachricht.style.display = "flex";
 });
 
-window.addEventListener("click", (event) => {
-  if (event.target === neueNachricht) {
-    neueNachricht.style.display = "none";
-  }
-});
 
 /*
     // Modal schließen
@@ -285,11 +340,7 @@ window.addEventListener("click", (event) => {
     });
 */
     // Modal auch schließen, wenn man außerhalb klickt
-    window.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    });
+
 
     loadMessages();
     setInterval(loadMessages, 5000);
@@ -363,7 +414,82 @@ window.addEventListener("click", (event) => {
 
     //antwort holen
 
+
+
+
+    //ARCHIV ÖFFNEN
+    function loadArchive() {
+
+        const archivDiv = document.getElementById("archiv");
+        const archivOpen = document.getElementById("archivOpen");
+
+  archivOpen.addEventListener("click", () => {
+
+const archivModal = document.getElementById("archivModal");
+const archivGrid = document.getElementById("archivGrid");
+const closeArchiv = document.getElementById("closeArchiv");
+
+// ÖFFNEN
+archivOpen.addEventListener("click", () => {
+  archivGrid.innerHTML = ""; // leeren
+
+fetch("http://localhost:3000/api/messages")
+  .then(res => res.json())
+  .then(data => {
+    if (data.success && data.messages.length > 0) {
+      // Sortieren: Neueste zuerst
+      data.messages.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+      data.messages.forEach(msg => {
+        const card = document.createElement("div");
+        card.className = "archivCard";
+
+        const title = document.createElement("h4");
+        title.textContent = `${msg.name} (${new Date(msg.time).toLocaleString()})`;
+
+        const content = document.createElement("p");
+        content.textContent = msg.msg;
+
+        const flasche = document.createElement("small");
+        flasche.textContent = `Flasche: ${msg.type} | ID: ${msg.idFlaschen}`;
+
+        card.appendChild(title);
+        card.appendChild(content);
+        card.appendChild(flasche);
+        archivGrid.appendChild(card);
+      });
+    } else {
+      archivGrid.innerHTML = "Keine Nachrichten im Archiv.";
+    }
+
+    archivModal.style.display = "flex";
+  })
+
+
+
+    .catch(() => {
+      archivGrid.innerHTML = "Fehler beim Laden des Archivs.";
+      archivModal.style.display = "flex";
+    });
+});
+
+
+
+
+
+
+
+
+      });
+
+
+
+
+
+    }
   
+loadArchive();
+
 
 
 </script>
@@ -373,144 +499,224 @@ window.addEventListener("click", (event) => {
   body {
   margin: 0;
   padding: 0;
+  background: linear-gradient(to bottom, #38ACFF, #C1F4FF, #ffffff);
+  height: 100vh;
+  
+
+  
 }
 
-    .msg-button {
-      padding: 10px 15px;
-      font-weight: bold;
-      cursor: pointer;
-      border: 1px solid #ccc;
-      background-color: #f0f0f0;
-      border-radius: 4px;
-      flex: 1 0 150px; /* Mindestens 150px breit, flexibel */
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+#respBox {
+  max-width: 45vw; /* oder z.B. 80% */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
 
-    /* Modal-Hintergrund */
-    .modal {
-      display: none; /* versteckt */
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(255, 255, 255, 0.0);
-      justify-content: center;
-      align-items: center;
-      
-    }
+#flaschenContainer {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: 50vh;
+  pointer-events: auto;
+  
 
-    /* Modal-Inhalt */
-    .modal-content {
-      padding: 10px;
-      width: 70vw;
-      height: 70vh;
-      overflow-y: auto;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      background-color: rgba(255, 255, 255, 0);
-      position: relative;
-      color: rgb(0, 0, 0);
-      display: flex;
-      word-wrap: break-word;
-      border-radius: 40px;
-      flex-direction: row;
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px); /* Für Safari */
-    }
+}
 
-    #links {
-      flex: 1;                 /* 1 Anteil → schmaler */
-      padding: 10px;
-    }
+#hintergrund {
+  pointer-events: auto;
+}
 
-    #rechts {
-      flex: 2;                 /* 2 Anteile → breiter */
-      padding: 10px;
-    }
+#bg {
+  position: fixed;
+  justify-self: top;
+  top: 50vh;
+  object-position: top;
+  left: 0;
+  width: 100vw;
+  height: 100%; /* z.B. halbe Höhe */
+  object-fit: cover; /* Zuschneiden, damit es die Fläche gut ausfüllt */
+  z-index: -100; /* Hinter dem Content */
+  pointer-events: none; /* Klicks gehen durch das Video durch */
+}
 
-    #msgBox {
-      display: block;         /* Standard-Block-Layout */
-      
-      padding: 15px;
-      margin-top: 40px;
-      
-      overflow: visible;      /* Falls Inhalte größer sind */
-      height: auto;           /* Wichtig: automatische Höhe */
-      border-radius: 30px;
-      font-size: 16pt;
-    }
+#bg video {
+  pointer-events: none;
+}
 
+#land img {
+  position: fixed;
+  bottom: 42vh;
+  right: 0;
+  width: 580px;
+  height: 300px; /* z.B. halbe Höhe */
+  /*object-fit: fill; /* Zuschneiden, damit es die Fläche gut ausfüllt */
+  z-index: -50; /* Hinter dem Content */
+  pointer-events: none;
+  
+}
 
-    #flaschenBild {
-    height: 100%;
-    width: auto;
-    object-fit: contain;
-    border-radius: 20px;
+#schiff img {
+  position: fixed;
+  bottom: 43vh;
+  left: 1vw;
+  width: 500px;
+  height: 250px;
+  z-index: -150;
+  cursor: pointer;
+  pointer-events: auto;
+
+}
+
+.archivOpen {
+  background: rgb(0, 0, 0);      /* Kein Hintergrund */
+  border: none;          /* Keine Umrandung */
+  padding: 0;            /* Kein Innenabstand */
+  margin: 0;             /* Kein Außenabstand */
+  cursor: pointer;       /* Mauszeiger zeigt Klick an */
+  width: 300px;          /* Breite des Buttons */
+  height: 100px;          /* Höhe des Buttons */
+  opacity: 0%;            /* komplett unsichtbar */
+  bottom: 52vh;
+  position: fixed;    /* falls nötig */
+}
+
+.msg-button {
+padding: 10px 15px;
+font-weight: bold;
+cursor: pointer;
+border: 1px solid #ccc;
+background-color: #f0f0f0;
+border-radius: 4px;
+flex: 1 0 150px; /* Mindestens 150px breit, flexibel */
+text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+/* Modal-Hintergrund */
+.modal {
+display: none; /* versteckt */
+position: fixed;
+z-index: 1000;
+left: 0;
+top: 0;
+width: 100vw;
+height: 100vh;
+background-color: rgba(255, 255, 255, 0.0);
+justify-content: center;
+align-items: center;
+
+}
+
+/* Modal-Inhalt */
+.modal-content {
+padding: 10px;
+width: 70vw;
+height: 70vh;
+overflow-y: auto;
+box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+background-color: rgba(255, 255, 255, 0);
+position: relative;
+color: rgb(0, 0, 0);
+display: flex;
+word-wrap: break-word;
+border-radius: 40px;
+flex-direction: row;
+backdrop-filter: blur(30px);
+-webkit-backdrop-filter: blur(30px); /* Für Safari */
+}
+
+#links {
+  flex: 1;                 /* 1 Anteil → schmaler */
+  padding: 10px;
+}
+
+#rechts {
+  flex: 2;                 /* 2 Anteile → breiter */
+  padding: 10px;
+}
+
+#msgBox {
+  display: block;         /* Standard-Block-Layout */
+  
+  padding: 15px;
+  margin-top: 40px;
+  
+  overflow: visible;      /* Falls Inhalte größer sind */
+  height: auto;           /* Wichtig: automatische Höhe */
+  border-radius: 30px;
+  font-size: 16pt;
 }
 
 
-    #msgGloss {
-      display: flex;
-      height: auto;
-      width: auto;
-      background-color: #ffffff;
-    }
+#flaschenBild {
+height: 100%;
+width: auto;
+object-fit: contain;
+border-radius: 20px;
+}
 
 
-        #neueNachricht {
-      display: none; /* versteckt */
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
+#msgGloss {
+  display: flex;
+  height: auto;
+  width: auto;
+  background-color: #ffffff;
+}
 
-    /* Modal-Inhalt */
-    #neueNachricht-modal-content {
-      padding: 40px;
-      border-radius: 6px;
-      max-width: 70vw;
-      max-height: 70vh;
-      overflow-y: auto;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      position: relative;
-      color: rgb(255,255,255);
-    }
 
-    /* Schließen-Button */
+    #neueNachricht {
+  display: none; /* versteckt */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal-Inhalt */
+#neueNachricht-modal-content {
+  padding: 40px;
+  border-radius: 6px;
+  max-width: 70vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  position: relative;
+  color: rgb(255,255,255);
+}
+
+/* Schließen-Button */
 /*    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      background: none;
-    } */
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  background: none;
+} */
 
 
-    .message {
-      border-bottom: 0px solid #eee;
-      padding: 0px 0;
-    }
-    .name {
-      font-weight: bold;
-    }
-    .time {
-      font-size: 0.8em;
-      color: #999;
-      margin-left: 0;
-    }
+.message {
+  border-bottom: 0px solid #eee;
+  padding: 0px 0;
+}
+.name {
+  font-weight: bold;
+}
+.time {
+  font-size: 0.8em;
+  color: #999;
+  margin-left: 0;
+}
 
 
 /*FLASCHEN STYLE*/
@@ -538,12 +744,15 @@ window.addEventListener("click", (event) => {
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
-  padding: 10px;
+  padding: 0px;
   border: 0px solid #000000;
   margin-bottom: 10px;
   scrollbar-width: thin;
-  height: 10vh;
-  justify-content: center;
+  height: 5vh;
+  justify-content: space-evenly;
+  overflow-y: hidden;
+  transform: translateY(2vh);
+  z-index: 30;
 }
 
 .message-row1::-webkit-scrollbar {
@@ -561,12 +770,14 @@ window.addEventListener("click", (event) => {
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
-  padding: 10px;
+  padding: 0px;
   border: 0px solid #000000;
   margin-bottom: 10px;
   scrollbar-width: thin;
-  height: 20vh;
-  justify-content: center;
+  height: 10vh;
+  justify-content: space-evenly;
+  overflow-y: hidden;
+  z-index: 20;
 }
 
 .message-row2::-webkit-scrollbar {
@@ -587,25 +798,110 @@ window.addEventListener("click", (event) => {
   padding: 10px;
   border: 0px solid #000000;
   margin-bottom: 10px;
-  scrollbar-width: thin;
-  height: 40vh;
-  justify-content: center;
+  scrollbar-width: auto;
+  height: 30vh;
+  justify-content: space-evenly;
+  overflow-y: hidden;
+  transform: translateY(0vh);
+  z-index: 10;
 }
 
 .message-row3::-webkit-scrollbar {
-  height: 8px;
-}
-.message-row3::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  display: none; /* Chrome, Safari, Opera: Scrollbar ausblenden */
 }
 
-.message-row1:has(.msg-image:nth-child(n + 6)),
-.message-row2:has(.msg-image:nth-child(n + 6)),
+.message-row3:hover {
+  scrollbar-width: auto; /* Firefox: Scrollbar anzeigen bei Hover */
+  -ms-overflow-style: auto; /* IE und Edge: Scrollbar anzeigen bei Hover */
+}
+
+.message-row3:hover::-webkit-scrollbar {
+  display: block; /* Chrome, Safari, Opera: Scrollbar anzeigen bei Hover */
+}
+
+.message-row1:has(.msg-image:nth-child(n + 40)),
+.message-row2:has(.msg-image:nth-child(n + 20)),
 .message-row3:has(.msg-image:nth-child(n + 6)) {
   justify-content: flex-start;
 }
 
+
+.archivModal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.0);
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto; /* ← HIER */
+  word-wrap: break-word;
+}
+
+
+
+/* MODAL ARCHIV */
+.modal-content-archiv {
+  padding: 20px;
+  width: 80vw;
+  height: 80vh;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+  scrollbar-width: 0px;
+  word-wrap: break-word;
+}
+
+.modal-content-archiv::-webkit-scrollbar {
+  height: 0px;
+  width: 0px;
+}
+.modal-content-archiv::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0px;
+}
+
+
+
+#archivGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* responsive */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+
+/* Einzelne Nachricht */
+.archivCard {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  word-wrap: break-word;
+  max-width: 400px;       /* ← Hier */
+  width: 100%;            /* ← Nimmt volle Breite der Grid-Spalte */
+  box-sizing: border-box; /* ← Verhindert Überschreiten durch Padding */
+}
+
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
 
 
 
