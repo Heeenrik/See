@@ -742,7 +742,6 @@ border-radius: 20px;
 .message-row1 {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
   gap: 8px;
   padding: 0px;
   border: 0px solid #000000;
@@ -750,17 +749,35 @@ border-radius: 20px;
   scrollbar-width: thin;
   height: 5vh;
   justify-content: space-evenly;
-  overflow-y: hidden;
   transform: translateY(2vh);
-  z-index: 30;
+  z-index: 50;
+
+  overflow-x: scroll;   /* immer Scrollbar reservieren! */
+  overflow-y: hidden;
+
+  /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
-.message-row1::-webkit-scrollbar {
-  height: 8px;
+/* Firefox: bei Hover sichtbar */
+.message-row1:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
 }
+
+/* Chrome, Safari, Edge (WebKit) */
+.message-row1::-webkit-scrollbar {
+  height: 6px;
+  background: transparent; /* track */
+}
+
 .message-row1::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  background-color: transparent; /* unsichtbar, aber Platz bleibt */
+  transition: background-color 0.3s ease;
+}
+
+.message-row1:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* sichtbar bei Hover */
 }
 
 /*2*/
@@ -768,7 +785,6 @@ border-radius: 20px;
 .message-row2 {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
   gap: 8px;
   padding: 0px;
   border: 0px solid #000000;
@@ -776,52 +792,84 @@ border-radius: 20px;
   scrollbar-width: thin;
   height: 10vh;
   justify-content: space-evenly;
+  z-index: 40;
+
+  overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
-  z-index: 20;
+
+  /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
+/* Firefox: bei Hover sichtbar */
+.message-row2:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+}
+
+/* Chrome, Safari, Edge (WebKit) */
 .message-row2::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
+  background: transparent; /* track */
 }
+
 .message-row2::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  background-color: transparent; /* unsichtbar, aber Platz bleibt */
+  transition: background-color 0.3s ease;
 }
+
+.message-row2:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* sichtbar bei Hover */
+}
+
+
 
 /*3*/
 
 .message-row3 {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
   gap: 8px;
   padding: 10px;
-  border: 0px solid #000000;
   margin-bottom: 10px;
-  scrollbar-width: auto;
-  height: 30vh;
+  height: 25vh;
   justify-content: space-evenly;
+  z-index: 30;
+  transform: translateY(-50px);
+
+  overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
-  transform: translateY(0vh);
-  z-index: 10;
+
+  /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
-.message-row3::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera: Scrollbar ausblenden */
-}
-
+/* Firefox: bei Hover sichtbar */
 .message-row3:hover {
-  scrollbar-width: auto; /* Firefox: Scrollbar anzeigen bei Hover */
-  -ms-overflow-style: auto; /* IE und Edge: Scrollbar anzeigen bei Hover */
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
 }
 
-.message-row3:hover::-webkit-scrollbar {
-  display: block; /* Chrome, Safari, Opera: Scrollbar anzeigen bei Hover */
+/* Chrome, Safari, Edge (WebKit) */
+.message-row3::-webkit-scrollbar {
+  height: 6px;
+  background: transparent; /* track */
 }
 
-.message-row1:has(.msg-image:nth-child(n + 40)),
-.message-row2:has(.msg-image:nth-child(n + 20)),
-.message-row3:has(.msg-image:nth-child(n + 6)) {
+.message-row3::-webkit-scrollbar-thumb {
+  background-color: transparent; /* unsichtbar, aber Platz bleibt */
+  transition: background-color 0.3s ease;
+}
+
+.message-row3:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* sichtbar bei Hover */
+}
+
+
+
+.message-row1:has(.msg-image:nth-child(n + 50)),
+.message-row2:has(.msg-image:nth-child(n + 30)),
+.message-row3:has(.msg-image:nth-child(n + 9)) {
   justify-content: flex-start;
 }
 
