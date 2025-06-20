@@ -13,7 +13,7 @@
 
     <!-- Modal -->
 <div id="modal" class="modal" style="font-family: Helvetica;">
-  <div class="modal-content">
+  <div class="modal-content" id="modal-content">
    <!-- <button class="close-btn" id="closeModal">&times;</button> -->
     
     
@@ -27,7 +27,7 @@
 
     <div id="rechts">
       <div id="flascheName" style="font-size: 30pt;"></div>
-      <div id="modalAbsender"></div>
+      <div id="modalAbsender" style="font-size: 30pt;"></div>
       <div id="modalZeit"></div>
       <div id="modalIdFlaschen"></div>
       <div id="scrollContent">
@@ -35,7 +35,7 @@
           <div id="modalText" style="padding: 0px;"></div>
         </div>
         <div id="respDiv">
-          <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" style="flex: auto; width: 30vw; margin: 10px;"></textarea>
+          <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten"></textarea>
           <br/>
           <button class="respBtn" id="respBtn">ANTWORTEN</button>
           <div id="respAbs"></div>
@@ -76,45 +76,90 @@
 </div>
   <!-- user input -->
 </div>
+
+
 <div id="neueNachricht" class=""modal>
-  <div id="neueNachricht-modal-content" style="background-color: white; color: black;">
-    <textarea type="text" id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none; border-width: 5px; border-color: #000000;"></textarea>
+  <div id="neueNachricht-modal-content" style="background-color: rgb(40,40,40,0.5); color: white; font-family: Helvetica;">
+    <textarea type="text" id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none; border-width: 0px; border-color: #000000;"></textarea>
   <br />
-  <textarea id="msgInput" placeholder="Deine Nachricht" rows="20" cols="40" style="resize: none; border-width: 5px"></textarea>
+  <textarea id="msgInput" placeholder="Deine Nachricht" rows="20" cols="40" style="resize: none; border-width: 0px"></textarea>
   <br />
+
+  <!-- Flasche auswählen -->
 
   <label for="type">Flasche auswählen</label>
 
 
-     <select name="type" id="typeInput">
+   <form>
+      <label>
+        <input type="radio" name="type" value="fl1" checked>
+        Glas1
+      </label><br>
 
+      <label>
+        <input type="radio" name="type" value="fl2">
+        Glas2
+      </label><br>
 
-          <option value="fl1">Glas1</option>
-          <option value="fl2">Glas2</option>
-          <option value="fl3">Glas3</option>
-          <option value="fl4">Plastik1</option>
-          <option value="fl5">Plastik2</option>
-          <option value="fl6">Plastik3</option>
+      <label>
+        <input type="radio" name="type" value="fl3">
+        Glas3
+      </label><br>
 
+      <label>
+        <input type="radio" name="type" value="fl4">
+        Plastik1
+      </label><br>
 
-     </select>
+      <label>
+        <input type="radio" name="type" value="fl5">
+        Plastik2
+      </label><br>
+
+      <label>
+        <input type="radio" name="type" value="fl6">
+        Plastik3
+      </label>
+    </form>
 
   <br />
+
+  <!-- Farbe auswählen -->
+
     <label for="color">Farbe auswählen</label>
 
 
-     <select name="color" id="colorInput">>
+        <form>
+      <label>
+        <input type="radio" name="color" value="cl1" checked>
+        Schwarz
+      </label><br>
 
+      <label>
+        <input type="radio" name="color" value="cl2">
+        Rot
+      </label><br>
 
-          <option value="cl1">schwarz</option>
-          <option value="cl2">rot</option>
-          <option value="cl3">blau</option>
-          <option value="cl4">grün</option>
-          <option value="cl5">lila</option>
-          <option value="cl6">gelb</option>
+      <label>
+        <input type="radio" name="color" value="cl3">
+        Blau
+      </label><br>
 
+      <label>
+        <input type="radio" name="color" value="cl4">
+        Grün
+      </label><br>
 
-     </select>
+      <label>
+        <input type="radio" name="color" value="cl5">
+        Lila
+      </label><br>
+
+      <label>
+        <input type="radio" name="color" value="cl6">
+        Gelb
+      </label>
+    </form>
 
   <br />
 <br />
@@ -126,9 +171,9 @@
 <button id="neu">Neue Nachricht</button>
 
 
-<div id="archivModal" class="archivModal">
+<div id="archivModal" class="archivModal" style="font-family: Helvetica;">
   <div class="modal-content-archiv">
-    <button id="closeArchiv" class="close-btn">&times;</button>
+    
     <div id="archivGrid"></div>
   </div>
 </div>
@@ -152,8 +197,11 @@
     const neueNachricht = document.getElementById("neueNachricht");
     const openNeu = document.getElementById("neu");
     const respBtn = document.getElementById("respBtn");
-  
+    const modalContent = document.getElementById("modal-content")
     const schiff = document.querySelector("#schiff img");
+
+    const newMsg = document.getElementById("msgInput");
+    const colorRadio = document.getElementById("color");
 
 
 window.addEventListener("click", (event) => {
@@ -188,39 +236,39 @@ function loadMessages() {
         const now = new Date();
 
         const typeToAnim = {
-          fl1: "http://localhost:3000/flaschen/anim/1-2.gif",
-          fl2: "http://localhost:3000/flaschen/anim/2-2.gif",
-          fl3: "http://localhost:3000/flaschen/anim/3-2.gif",
-          fl4: "http://localhost:3000/flaschen/anim/4-2.gif",
-          fl5: "http://localhost:3000/flaschen/anim/5-2.gif",
-          fl6: "http://localhost:3000/flaschen/anim/6-2.gif",
+          fl1: "http://localhost:3000/flaschen/anim/1w.gif",
+          fl2: "http://localhost:3000/flaschen/anim/2w.gif",
+          fl3: "http://localhost:3000/flaschen/anim/3w.gif",
+          fl4: "http://localhost:3000/flaschen/anim/4w.gif",
+          fl5: "http://localhost:3000/flaschen/anim/5w.gif",
+          fl6: "http://localhost:3000/flaschen/anim/6w.gif",
         };
 
         const typeToImage = {
-          fl1: "http://localhost:3000/flaschen/1-2.png",
-          fl2: "http://localhost:3000/flaschen/2-2.png",
-          fl3: "http://localhost:3000/flaschen/3-2.png",
-          fl4: "http://localhost:3000/flaschen/4-2.png",
-          fl5: "http://localhost:3000/flaschen/5-2.png",
-          fl6: "http://localhost:3000/flaschen/6-2.png",
+          fl1: "http://localhost:3000/flaschen/anim/1.gif",
+          fl2: "http://localhost:3000/flaschen/anim/2.gif",
+          fl3: "http://localhost:3000/flaschen/anim/3.gif",
+          fl4: "http://localhost:3000/flaschen/anim/4.gif",
+          fl5: "http://localhost:3000/flaschen/anim/5.gif",
+          fl6: "http://localhost:3000/flaschen/anim/6.gif",
         };
 
           const typeToName = {
-          fl1: "Einwegpfandflasche",
-          fl2: "Einwegpfandflasche",
-          fl3: "Einwegpfandflasche",
-          fl4: "Mehrwegglasflasche",
-          fl5: "Mehrwegglasflasche",
-          fl6: "Mehrwegglasflasche",
+          fl1: "Mehrwegglasflasche",
+          fl2: "Mehrwegglasflasche",
+          fl3: "Einwegglasflasche",
+          fl4: "Einwegpfandflasche",
+          fl5: "Einwegpfandflasche",
+          fl6: "Einwegpfandflasche",
         };
 
         const msgCol = {
-          cl1: "rgb(40,40,40)",       // schwarz
-          cl2: "rgb(220,50,50)",      // rot
-          cl3: "rgb(55,180,220)",     // blau
-          cl4: "rgb(56,220,90)",      // grün
-          cl5: "rgb(212,55,220)",     // lila
-          cl6: "rgb(220,180,50)",     // gelb
+          cl1: "rgb(40,40,40,0.5)",       // schwarz
+          cl2: "rgb(220,50,50,0.5)",      // rot
+          cl3: "rgb(55,180,220,0.5)",     // blau
+          cl4: "rgb(56,220,90,0.5)",      // grün
+          cl5: "rgb(212,55,220,0.5)",     // lila
+          cl6: "rgb(220,180,50,0.5)",     // gelb
         };
 
         const txtCol = {
@@ -250,9 +298,10 @@ function loadMessages() {
             modalFlasche.textContent = typeToName[msg.type];
             modalAbsender.textContent = "von " + msg.name;
             modalZeit.textContent = msg.time;
-            modalID.textContent = msg.idFlaschen
+            modalID.textContent = "Flaschenpost-ID: " + msg.idFlaschen
             modal.style.display = "flex";
-            msgBox.style.backgroundColor = msgCol[msg.color] || "#fff";
+            modalContent.style.backgroundColor = msgCol[msg.color] || "#fff";
+            modalContent.style.color = txtCol[msg.color];
             msgBox.style.color = txtCol[msg.color];
             flaschenBild.src = typeToImage[msg.type] || "";
 
@@ -282,10 +331,14 @@ function loadMessages() {
                     responses.forEach(resp => {
                       const respEl = document.createElement("div");
                       respEl.className = "response";
-                      respAbs.textContent = resp.timeResp;
+                      //respAbs.textContent = resp.timeResp;
                       respEl.textContent = resp.msgResp;
                       
                       respBox.appendChild(respEl);
+
+                      const spacer = document.createElement("div");
+                      spacer.style.height = "10px"; // oder "1em", je nach Wunsch
+                      respBox.appendChild(spacer);
                       
                     });
                   } else {
@@ -328,9 +381,48 @@ function loadMessages() {
 
 //NEUE NACHRICHT FENSER
 
+
 openNeu.addEventListener("click", () => {
   neueNachricht.style.display = "flex";
 });
+
+// farbe nach auswahl anpassen
+
+const colorRadios = document.querySelectorAll('input[name="color"]');
+const msgInput = document.getElementById('msgInput');
+const neueNachrichtFenster = document.getElementById("neueNachricht-modal-content");
+
+colorRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    switch (radio.value) {
+      case 'cl1': // Schwarz
+        neueNachrichtFenster.style.backgroundColor = 'rgb(40,40,40,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(255,255,255)';
+        break;
+      case 'cl2': // Rot
+        neueNachrichtFenster.style.backgroundColor = 'rgb(220,50,50,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(255,255,255)';
+        break;
+      case 'cl3': // Blau
+        neueNachrichtFenster.style.backgroundColor = 'rgb(55,179,220,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(0,0,0)';
+        break;
+      case 'cl4': // Grün
+        neueNachrichtFenster.style.backgroundColor = 'rgb(56,220,89,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(0,0,0)';
+        break;
+      case 'cl5': // Lila
+        neueNachrichtFenster.style.backgroundColor = 'rgb(212,55,220,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(255,255,255)';
+        break;
+      case 'cl6': // Gelb
+        neueNachrichtFenster.style.backgroundColor = 'rgb(210,178,50,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(0,0,0)';
+        break;
+    }
+  });
+});
+
 
 
 /*
@@ -347,13 +439,33 @@ openNeu.addEventListener("click", () => {
 
 
 
+// horizontales scrollen übersetzen
+
+const rows = document.querySelectorAll('.message-row1, .message-row2, .message-row3');
+
+rows.forEach(row => {
+  row.addEventListener('wheel', function (e) {
+    // Standardverhalten (vertikales Scrollen) verhindern
+    e.preventDefault();
+
+    // Horizontal scrollen (z. B. nach rechts bei Scroll runter)
+    row.scrollLeft += e.deltaY;
+  }, { passive: false });
+});
+
+
+
+
+
 //nachricht senden
 
     sendBtn.addEventListener("click", () => {
       const name = nameInput.value.trim();
       const msg = msgInput.value.trim();
-      const type = typeInput.value.trim();
-      const color = colorInput.value.trim();
+      //const type = typeInput.value.trim();
+      const type = document.querySelector('input[name="type"]:checked')?.value || "";
+      //const color = colorInput.value.trim();
+      const color = document.querySelector('input[name="color"]:checked')?.value || "";
 
       if (!name || !msg) {
         alert("Bitte Name und Nachricht eingeben.");
@@ -423,6 +535,33 @@ openNeu.addEventListener("click", () => {
         const archivDiv = document.getElementById("archiv");
         const archivOpen = document.getElementById("archivOpen");
 
+        const typeToImage = {
+          fl1: "http://localhost:3000/flaschen/anim/1.gif",
+          fl2: "http://localhost:3000/flaschen/anim/2.gif",
+          fl3: "http://localhost:3000/flaschen/anim/3.gif",
+          fl4: "http://localhost:3000/flaschen/anim/4.gif",
+          fl5: "http://localhost:3000/flaschen/anim/5.gif",
+          fl6: "http://localhost:3000/flaschen/anim/6.gif",
+        };
+
+        const msgCol = {
+          cl1: "rgb(40,40,40,0.5)",       // schwarz
+          cl2: "rgb(220,50,50,0.5)",      // rot
+          cl3: "rgb(55,180,220,0.5)",     // blau
+          cl4: "rgb(56,220,90,0.5)",      // grün
+          cl5: "rgb(212,55,220,0.5)",     // lila
+          cl6: "rgb(220,180,50,0.5)",     // gelb
+        };
+
+        const txtCol = {
+          cl1: "rgb(255,255,255)",    // schwarz
+          cl2: "rgb(255,255,255)",    // rot
+          cl3: "rgb(0,0,0)",          // blau
+          cl4: "rgb(0,0,0)",          // grün
+          cl5: "rgb(255,255,255)",    // lila
+          cl6: "rgb(0,0,0)",          // gelb
+        };
+
   archivOpen.addEventListener("click", () => {
 
 const archivModal = document.getElementById("archivModal");
@@ -443,19 +582,76 @@ fetch("http://localhost:3000/api/messages")
       data.messages.forEach(msg => {
         const card = document.createElement("div");
         card.className = "archivCard";
+        card.style.backgroundColor = msgCol[msg.color];
+        card.style.color = txtCol[msg.color];
 
-        const title = document.createElement("h4");
-        title.textContent = `${msg.name} (${new Date(msg.time).toLocaleString()})`;
+        const imgArch = document.createElement("img");
+        imgArch.src = typeToImage[msg.type];
+
+        const title = document.createElement("p");
+
+        //zeitformat konvertieren
+        const formattedTime = new Date(msg.time).toLocaleString("de-DE", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        title.innerHTML = `von <b>${msg.name}</b> am <b>${formattedTime}</b>`;
 
         const content = document.createElement("p");
         content.textContent = msg.msg;
 
-        const flasche = document.createElement("small");
-        flasche.textContent = `Flasche: ${msg.type} | ID: ${msg.idFlaschen}`;
+        const flasche = document.createElement("p");
+        flasche.textContent = `Flaschenpost-ID: ${msg.idFlaschen}`;
 
+        const AntwortenA = document.createElement("div");
+        AntwortenA.textContent = "Antworten:";
+        
+        card.appendChild(imgArch);
         card.appendChild(title);
         card.appendChild(content);
+        card.appendChild(AntwortenA);
+
+
+        const respBoxArch = document.createElement("small");
+        respBoxArch.className = "responses-container-archive";
+        card.appendChild(respBoxArch);
+
         card.appendChild(flasche);
+
+//antworten im archiv
+
+        fetch("http://localhost:3000/api/responses")
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              const responses = data.messages.filter(resp => resp.idParent == msg.idFlaschen);
+
+              if (responses.length === 0) {
+                respBoxArch.textContent = "keine Antworten :(";
+                return;
+              }
+
+              responses.forEach(resp => {
+                const respEl = document.createElement("p");
+                respEl.className = "response";
+                respEl.textContent = resp.msgResp;
+                respBoxArch.appendChild(respEl);
+
+                //const spacer = document.createElement("br");
+                //respBoxArch.appendChild(spacer);
+        });
+            } else {
+              respBox.textContent = "fehler.";
+            }
+          })
+            
+//ende
+
+
         archivGrid.appendChild(card);
       });
     } else {
@@ -585,7 +781,7 @@ loadArchive();
 padding: 10px 15px;
 font-weight: bold;
 cursor: pointer;
-border: 1px solid #ccc;
+border: 1px solid #000000;
 background-color: #f0f0f0;
 border-radius: 4px;
 flex: 1 0 150px; /* Mindestens 150px breit, flexibel */
@@ -604,7 +800,7 @@ left: 0;
 top: 0;
 width: 100vw;
 height: 100vh;
-background-color: rgba(255, 255, 255, 0.0);
+background-color: rgba(255, 255, 255, 0);
 justify-content: center;
 align-items: center;
 
@@ -613,7 +809,7 @@ align-items: center;
 /* Modal-Inhalt */
 .modal-content {
 padding: 10px;
-width: 70vw;
+width: 60vw;
 height: 70vh;
 overflow-y: auto;
 box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -631,23 +827,44 @@ backdrop-filter: blur(30px);
 #links {
   flex: 1;                 /* 1 Anteil → schmaler */
   padding: 10px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
+  
 }
 
 #rechts {
   flex: 2;                 /* 2 Anteile → breiter */
   padding: 10px;
+  max-width: 40vw;
+  
+}
+
+.modal-content::-webkit-scrollbar {
+  height: 0px;
+  width: 0px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 0px;
 }
 
 #msgBox {
   display: block;         /* Standard-Block-Layout */
   
-  padding: 15px;
+  padding: 0px;
   margin-top: 40px;
   
   overflow: visible;      /* Falls Inhalte größer sind */
   height: auto;           /* Wichtig: automatische Höhe */
   border-radius: 30px;
   font-size: 16pt;
+}
+
+#respInput {
+  flex: auto;
+  width: 30vw;
+  margin: 0px;
+  resize: none;
 }
 
 
@@ -667,7 +884,7 @@ border-radius: 20px;
 }
 
 
-    #neueNachricht {
+#neueNachricht {
   display: none; /* versteckt */
   position: fixed;
   z-index: 1000;
@@ -675,12 +892,13 @@ border-radius: 20px;
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0);
   justify-content: center;
   align-items: center;
+  
 }
 
-/* Modal-Inhalt */
+/* Modal-Inhalt NEUE NACHRICHT */
 #neueNachricht-modal-content {
   padding: 40px;
   border-radius: 6px;
@@ -690,6 +908,9 @@ border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   position: relative;
   color: rgb(255,255,255);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px); /* Für Safari */
+
 }
 
 /* Schließen-Button */
@@ -751,6 +972,7 @@ border-radius: 20px;
   justify-content: space-evenly;
   transform: translateY(2vh);
   z-index: 50;
+  scroll-behavior: smooth;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -758,6 +980,9 @@ border-radius: 20px;
   /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 }
 
 /* Firefox: bei Hover sichtbar */
@@ -793,6 +1018,7 @@ border-radius: 20px;
   height: 10vh;
   justify-content: space-evenly;
   z-index: 40;
+  scroll-behavior: smooth;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -800,6 +1026,9 @@ border-radius: 20px;
   /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 }
 
 /* Firefox: bei Hover sichtbar */
@@ -836,6 +1065,7 @@ border-radius: 20px;
   justify-content: space-evenly;
   z-index: 30;
   transform: translateY(-50px);
+  scroll-behavior: smooth;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -843,6 +1073,9 @@ border-radius: 20px;
   /* Firefox: unsichtbare Scrollbar (aber Platz reserviert) */
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 }
 
 /* Firefox: bei Hover sichtbar */
@@ -897,7 +1130,7 @@ border-radius: 20px;
   width: 80vw;
   height: 80vh;
   overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
   position: relative;
   display: flex;
@@ -905,6 +1138,8 @@ border-radius: 20px;
   scroll-behavior: smooth;
   scrollbar-width: 0px;
   word-wrap: break-word;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); /* Für Safari */
 }
 
 .modal-content-archiv::-webkit-scrollbar {
@@ -928,15 +1163,19 @@ border-radius: 20px;
 
 /* Einzelne Nachricht */
 .archivCard {
-  border: 1px solid #ccc;
+  border: 0px solid #ffffff;
   border-radius: 12px;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   word-wrap: break-word;
   max-width: 400px;       /* ← Hier */
   width: 100%;            /* ← Nimmt volle Breite der Grid-Spalte */
   box-sizing: border-box; /* ← Verhindert Überschreiten durch Padding */
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px); /* Für Safari */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 }
 
 
