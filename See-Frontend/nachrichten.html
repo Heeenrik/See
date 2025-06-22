@@ -10,9 +10,13 @@
 <body>
 
 
+<!-- LEISTE -->
+<div id="leiste"></div>
+
+
 
     <!-- Modal -->
-<div id="modal" class="modal" style="font-family: Helvetica;">
+<div id="modal" class="modal" style="font-family: pixel;">
   <div class="modal-content" id="modal-content">
    <!-- <button class="close-btn" id="closeModal">&times;</button> -->
     
@@ -26,20 +30,21 @@
     
 
     <div id="rechts">
-      <div id="flascheName" style="font-size: 30pt;"></div>
-      <div id="modalAbsender" style="font-size: 30pt;"></div>
+      <div id="flascheName" style="font-size: 40pt; display: inline-block;"></div>
+      <div id="modalAbsender" style="font-size: 40pt; display: inline-block;"></div>
       <div id="modalZeit"></div>
       <div style="display: inline-block;">Flaschenpost-ID: </div>
       <div id="modalIdFlaschen" style="display: inline-block;"></div>
       <div id="scrollContent">
         <div id="msgBox">
-          <div id="modalText" style="padding: 0px;"></div>
+          <div id="modalText" style="padding: 0px; font-size: 30pt;"></div>
         </div>
         <div id="respDiv">
           <div id="resp-Wrapper" class="resp-Wrapper">
             <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" rows="1"></textarea>
-            <br/>
-            <button class="respBtn" id="respBtn">ANTWORTEN</button>
+            <button class="respBtn" id="respBtn">
+              <img src="http://localhost:3000/absenden.png" alt="Icon" style="height: 40px; vertical-align: middle;" />
+            </button>
           </div>
           <div id="antwortenScroll">
             <div id="respAbs"></div>
@@ -67,9 +72,7 @@
   <img src="http://localhost:3000/flaschen/land.png">
 </div>
 
-<div id="schiff">
-  <img src="http://localhost:3000/schiff.gif">
-</div>
+
 
 
 </div>
@@ -89,18 +92,18 @@
     
 
     
-      <div id="neueNachricht-modal-content" style="background-color: rgba(40,40,40,0.5); color: white; font-family: Helvetica;">
+      <div id="neueNachricht-modal-content" style="background-color: rgba(255,255,255,0.5); color: black; font-family: pixel;">
         <!-- Textareas -->
         <div id="neuLinks">
           <img src="http://localhost:3000/flaschen/anim/1.gif" id="flaschePreview"/>
         </div>
 
         <div id="neuRechts">
-          <textarea id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none; border: none;"></textarea><br />
-          <textarea id="msgInput" placeholder="Deine Nachricht" rows="5" style="resize: none; border: none;"></textarea><br />
+          <textarea id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none;"></textarea><br />
+          <textarea id="msgInput" placeholder="Deine Nachricht" rows="5" style="resize: none;"></textarea><br />
 
           <!-- Flaschentyp auswählen -->
-          <label for="type">Flasche auswählen</label>
+          <label for="type"></label>
             <div class="flaschen-auswahl">
               <label>
                 <input type="radio" name="type" value="fl1" checked>
@@ -134,6 +137,8 @@
               display: flex;
               gap: 10px;
               flex-wrap: wrap; /* optional für kleine Bildschirme */
+              justify-content: space-evenly;
+              margin-top: 2vh;
             }
 
             .flaschen-auswahl label {
@@ -152,8 +157,8 @@
               height: auto;
               opacity: 0.5;
               transition: opacity 0.2s ease;
-              border: 2px solid transparent;
-              border-radius: 6px;
+              border: 3px solid transparent;
+              border-radius: 0px;
             }
 
             .flaschen-auswahl input[type="radio"]:checked + img {
@@ -165,17 +170,73 @@
 
           <br />
           <!-- Farbe auswählen -->
-          <label for="color">Farbe auswählen</label>
-          <form>
-            <label><input type="radio" name="color" value="cl1" checked> Schwarz</label><br />
-            <label><input type="radio" name="color" value="cl2"> Rot</label><br />
-            <label><input type="radio" name="color" value="cl3"> Blau</label><br />
-            <label><input type="radio" name="color" value="cl4"> Grün</label><br />
-            <label><input type="radio" name="color" value="cl5"> Lila</label><br />
-            <label><input type="radio" name="color" value="cl6"> Gelb</label>
-          </form>
+          <label for="color"></label>
+            <div class="farben-auswahl">
+              <label>
+                <input type="radio" name="color" value="cl0" checked>
+                <span class="color-circle" style="background-color: rgb(255,255,255);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl1">
+                <span class="color-circle" style="background-color: rgb(40,40,40);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl2">
+                <span class="color-circle" style="background-color: rgb(220,50,50);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl3">
+                <span class="color-circle" style="background-color: rgb(55,180,220);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl4">
+                <span class="color-circle" style="background-color: rgb(56,220,90);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl5">
+                <span class="color-circle" style="background-color: rgb(212,55,220);"></span>
+              </label>
+              <label>
+                <input type="radio" name="color" value="cl6">
+                <span class="color-circle" style="background-color: rgb(220,180,50);"></span>
+              </label>
+            </div>
+            <style>
+              .farben-auswahl {
+              display: flex;
+              gap: 10px;
+              margin-top: 0vh;
+              margin-bottom: 2vh;
+              flex-wrap: wrap;
+              justify-content: space-evenly;
+            }
 
-          <br /><br />
+            .farben-auswahl label {
+              cursor: pointer;
+            }
+
+            .farben-auswahl input[type="radio"] {
+              display: none;
+            }
+
+            .color-circle {
+              width: 30px;
+              height: 30px;
+              border-radius: 0%;
+              display: inline-block;
+              border: 8px solid transparent;
+              /*transition: border 0.2s ease;*/
+              border: 3px solid black;
+            }
+
+            .farben-auswahl input[type="radio"]:checked + .color-circle {
+              border: 8px solid #000; /* oder weiß, je nach Hintergrund */
+              width: 20px;
+              height: 20px;
+              box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+            }
+            </style>
+        
           <button id="sendBtn">Nachricht senden</button>
       </div>
     </div>
@@ -184,7 +245,7 @@
 <button id="neu">Neue Nachricht</button>
 
 
-<div id="archivModal" class="archivModal" style="font-family: Helvetica;">
+<div id="archivModal" class="archivModal" style="font-family: pixel;">
   <div class="modal-content-archiv">
     
     <div id="archivGrid"></div>
@@ -192,6 +253,10 @@
 </div>
 
 <button id="archivOpen" class="archivOpen"> </button>
+<div id="schiff">
+  <img src="http://localhost:3000/schiff.gif">
+</div>
+
 
 <div id="himmel"></div>
 
@@ -309,6 +374,7 @@ function loadMessages() {
         };
 
         const msgCol = {
+          cl0: "rgb(255,255,255,0.5)",
           cl1: "rgb(40,40,40,0.5)",       // schwarz
           cl2: "rgb(220,50,50,0.5)",      // rot
           cl3: "rgb(55,180,220,0.5)",     // blau
@@ -318,6 +384,7 @@ function loadMessages() {
         };
 
         const txtCol = {
+          cl0: "rgb(0,0,0)",
           cl1: "rgb(255,255,255)",    // schwarz
           cl2: "rgb(255,255,255)",    // rot
           cl3: "rgb(0,0,0)",          // blau
@@ -352,7 +419,17 @@ function loadMessages() {
             modalText.textContent = msg.msg;
             modalFlasche.textContent = typeToName[msg.type];
             modalAbsender.textContent = "von " + msg.name;
-            modalZeit.textContent = msg.time;
+            //modalAbsender.innerHTML = 'von <strong>' + msg.name + '</strong>';
+
+            const formattedTime = new Date(msg.time).toLocaleString("de-DE", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit"
+            });
+
+            modalZeit.textContent = formattedTime;
             modalID.textContent = msg.idFlaschen;
             modal.style.display = "flex";
             modalContent.style.backgroundColor = msgCol[msg.color] || "#fff";
@@ -442,6 +519,10 @@ const flaschePreview = document.getElementById("flaschePreview");
 colorRadios.forEach(radio => {
   radio.addEventListener('change', () => {
     switch (radio.value) {
+      case 'cl0': // Weiss
+        neueNachrichtFenster.style.backgroundColor = 'rgb(255,255,255,0.5)';
+        neueNachrichtFenster.style.color = 'rgb(0,0,0)';
+        break;
       case 'cl1': // Schwarz
         neueNachrichtFenster.style.backgroundColor = 'rgb(40,40,40,0.5)';
         neueNachrichtFenster.style.color = 'rgb(255,255,255)';
@@ -622,6 +703,7 @@ rows.forEach(row => {
         };
 
         const msgCol = {
+          cl0: "rgb(255,255,255,0.5)",
           cl1: "rgb(40,40,40,0.5)",       // schwarz
           cl2: "rgb(220,50,50,0.5)",      // rot
           cl3: "rgb(55,180,220,0.5)",     // blau
@@ -631,6 +713,7 @@ rows.forEach(row => {
         };
 
         const txtCol = {
+          cl0: "rgb(0,0,0)",
           cl1: "rgb(255,255,255)",    // schwarz
           cl2: "rgb(255,255,255)",    // rot
           cl3: "rgb(0,0,0)",          // blau
@@ -682,6 +765,7 @@ fetch("http://localhost:3000/api/messages")
         content.textContent = msg.msg;
 
         const flasche = document.createElement("small");
+        flasche.classList.add("id-label");
         flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
         
 
@@ -815,9 +899,21 @@ document.body.style.background = `
   /*background: linear-gradient(to bottom, #38ACFF, #C1F4FF, #ffffff);*/
   height: 100vh;
   overflow: hidden;
-  
+  font-family: "pixel";
 
   
+}
+
+
+@font-face {
+  font-family: "pixel";
+  src: url('http://localhost:3000/pokemon-bw.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  font-size: 30px; /* Standard sind 16px → also 12.5% größer */
 }
 
 #himmel {
@@ -895,8 +991,10 @@ document.body.style.background = `
   pointer-events: auto;
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
-
+  transition: transform 0.1s;
+  transform-origin: 50% 80%;
 }
+
 
 .archivOpen {
   background: rgb(0, 0, 0);      /* Kein Hintergrund */
@@ -909,6 +1007,10 @@ document.body.style.background = `
   opacity: 0%;            /* komplett unsichtbar */
   bottom: 52vh;
   position: fixed;    /* falls nötig */
+}
+
+.archivOpen:hover + #schiff img {
+  transform: scale(1.2);
 }
 
 .msg-button {
@@ -971,6 +1073,7 @@ backdrop-filter: blur(30px);
   flex: 2;                 /* 2 Anteile → breiter */
   padding: 10px;
   max-width: 40vw;
+  overflow-y: auto;
   
 }
 
@@ -1026,14 +1129,33 @@ backdrop-filter: blur(30px);
   width: 30vw;
   resize: none;
   border: 5px solid black;
-  font-size: medium;
+  font-family: pixel;
+  font-size: 24pt;
+  background-color: #ffffff;
+  padding-left: 10px;
 }
 
-#respBTN {
+#respBtn {
   flex-shrink: 0;
   height: 100%;
-  width: 30px;
+  width: 50px;
   border: 5px solid black;
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  font-family: pixel;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+#respBtn img {
+  object-fit: contain;
+  width: 120%;
+  height: 120%;
 }
 
 
@@ -1042,6 +1164,7 @@ height: 100%;
 width: auto;
 object-fit: contain;
 border-radius: 20px;
+margin-left: 2vw;
 }
 
 
@@ -1051,6 +1174,25 @@ border-radius: 20px;
   width: auto;
   background-color: #ffffff;
 }
+
+#nameInput {
+  width: 100%;
+  font-size: 30pt;
+  font-family: "pixel";
+  padding: 8px;
+  border: 3px solid black;
+  background-color: white;
+}
+
+#msgInput {
+  width: 100%;
+  font-size: 30pt;
+  font-family: "pixel";
+  padding: 8px;
+  border: 3px solid black;
+  background-color: white;
+}
+
 
 
 #neueNachricht {
@@ -1068,7 +1210,7 @@ border-radius: 20px;
 
 /* Modal-Inhalt NEUE NACHRICHT */
 #neueNachricht-modal-content {
-  padding: 40px;
+  padding: 20px;
   border-radius: 0px;
   border: 10px solid black;
   width: 60vw;
@@ -1090,7 +1232,7 @@ border-radius: 20px;
 
 #neuLinks {
   flex: 1;                 /* 1 Anteil → schmaler */
-  padding: 10px;
+  
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
   
@@ -1098,13 +1240,26 @@ border-radius: 20px;
 
 #neuRechts {
   flex: 2;                 /* 2 Anteile → breiter */
-  padding: 10px;
+  padding-right: 10px;
   max-width: 40vw;
   flex-direction: column;
 }
 
 #flaschePreview {
   height: 100%;
+  margin-left: 2vw;
+}
+
+#sendBtn {
+  width: 100%;
+  height: 70px;
+  position: relative;
+  color: black;
+  background-color: #52a6f4;
+  border: 3px solid black;
+  font-family: "pixel";
+  font-size: 30pt;
+  cursor: pointer;
 }
 
 /* Schließen-Button */
@@ -1144,10 +1299,11 @@ border-radius: 20px;
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.1s;
+  transform-origin: 50% 100%;
 }
 
 .msg-image:hover {
-  transform: scale(1.12);
+  transform: scale(1.2);
 }
 
 /* NACHRICHTEN ZEILEN */
@@ -1375,6 +1531,7 @@ border-radius: 20px;
   -webkit-backdrop-filter: blur(30px); /* Für Safari */
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
+  padding-bottom: 50px;
 }
 
 
@@ -1387,6 +1544,13 @@ border-radius: 20px;
   border: none;
   background: none;
   cursor: pointer;
+}
+
+.id-label {
+  position: absolute;
+  bottom: 8px;
+  left: 0.8vw;
+  font-size: 0.7em;
 }
 
 
