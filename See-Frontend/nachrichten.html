@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Nachrichtenboard</title>
+  <title>Flaschenpost DEV</title>
   <style>
 
   </style>
@@ -29,18 +29,23 @@
       <div id="flascheName" style="font-size: 30pt;"></div>
       <div id="modalAbsender" style="font-size: 30pt;"></div>
       <div id="modalZeit"></div>
-      <div id="modalIdFlaschen"></div>
+      <div style="display: inline-block;">Flaschenpost-ID: </div>
+      <div id="modalIdFlaschen" style="display: inline-block;"></div>
       <div id="scrollContent">
         <div id="msgBox">
           <div id="modalText" style="padding: 0px;"></div>
         </div>
         <div id="respDiv">
-          <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten"></textarea>
-          <br/>
-          <button class="respBtn" id="respBtn">ANTWORTEN</button>
-          <div id="respAbs"></div>
-          <div id="respBox"></div>
-          <br/>
+          <div id="resp-Wrapper" class="resp-Wrapper">
+            <textarea type="text" id="respInput" placeholder="Auf diese Flasche antworten" rows="1"></textarea>
+            <br/>
+            <button class="respBtn" id="respBtn">ANTWORTEN</button>
+          </div>
+          <div id="antwortenScroll">
+            <div id="respAbs"></div>
+            <div id="respBox"></div>
+            <br/>
+          </div>
         </div>
     </div>
 
@@ -53,16 +58,17 @@
 
 <!-- Hintergrund -->
 <div id="hintergrund">
-  <video autoplay muted loop playsinline class="bg" id="bg">
-  <source src="http://localhost:3000/flaschen/wasser.mp4" type="video/mp4" />
-  Dein Browser unterstützt kein HTML5-Video.
+  <!--<video autoplay muted loop playsinline class="bg" id="bg">
+  <source src="http://localhost:3000/flaschen/wasser.mp4" type="video/mp4" />-->
+  <img src="http://localhost:3000/flaschen/wasser.gif" class="bg" id="bg" style="width: 100vw; height: 50vh;">
+  
 </video>
 <div id="land">
   <img src="http://localhost:3000/flaschen/land.png">
 </div>
 
 <div id="schiff">
-  <img src="http://localhost:3000/schiff.png">
+  <img src="http://localhost:3000/schiff.gif">
 </div>
 
 
@@ -78,96 +84,103 @@
 </div>
 
 
-<div id="neueNachricht" class=""modal>
-  <div id="neueNachricht-modal-content" style="background-color: rgb(40,40,40,0.5); color: white; font-family: Helvetica;">
-    <textarea type="text" id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none; border-width: 0px; border-color: #000000;"></textarea>
-  <br />
-  <textarea id="msgInput" placeholder="Deine Nachricht" rows="20" cols="40" style="resize: none; border-width: 0px"></textarea>
-  <br />
-
-  <!-- Flasche auswählen -->
-
-  <label for="type">Flasche auswählen</label>
-
-
-   <form>
-      <label>
-        <input type="radio" name="type" value="fl1" checked>
-        Glas1
-      </label><br>
-
-      <label>
-        <input type="radio" name="type" value="fl2">
-        Glas2
-      </label><br>
-
-      <label>
-        <input type="radio" name="type" value="fl3">
-        Glas3
-      </label><br>
-
-      <label>
-        <input type="radio" name="type" value="fl4">
-        Plastik1
-      </label><br>
-
-      <label>
-        <input type="radio" name="type" value="fl5">
-        Plastik2
-      </label><br>
-
-      <label>
-        <input type="radio" name="type" value="fl6">
-        Plastik3
-      </label>
-    </form>
-
-  <br />
-
-  <!-- Farbe auswählen -->
-
-    <label for="color">Farbe auswählen</label>
-
-
-        <form>
-      <label>
-        <input type="radio" name="color" value="cl1" checked>
-        Schwarz
-      </label><br>
-
-      <label>
-        <input type="radio" name="color" value="cl2">
-        Rot
-      </label><br>
-
-      <label>
-        <input type="radio" name="color" value="cl3">
-        Blau
-      </label><br>
-
-      <label>
-        <input type="radio" name="color" value="cl4">
-        Grün
-      </label><br>
-
-      <label>
-        <input type="radio" name="color" value="cl5">
-        Lila
-      </label><br>
-
-      <label>
-        <input type="radio" name="color" value="cl6">
-        Gelb
-      </label>
-    </form>
-
-  <br />
-<br />
-  <button id="sendBtn">Nachricht senden</button>
-</div>
-  </div>
-
+<div id="neueNachricht" class="modal">
   
+    
+
+    
+      <div id="neueNachricht-modal-content" style="background-color: rgba(40,40,40,0.5); color: white; font-family: Helvetica;">
+        <!-- Textareas -->
+        <div id="neuLinks">
+          <img src="http://localhost:3000/flaschen/anim/1.gif" id="flaschePreview"/>
+        </div>
+
+        <div id="neuRechts">
+          <textarea id="nameInput" placeholder="Dein Name" rows="1" cols="40" style="resize: none; border: none;"></textarea><br />
+          <textarea id="msgInput" placeholder="Deine Nachricht" rows="5" style="resize: none; border: none;"></textarea><br />
+
+          <!-- Flaschentyp auswählen -->
+          <label for="type">Flasche auswählen</label>
+            <div class="flaschen-auswahl">
+              <label>
+                <input type="radio" name="type" value="fl1" checked>
+                <img src="http://localhost:3000/flaschen/anim/1.gif" alt="Glas1" />
+              </label>
+              <label>
+                <input type="radio" name="type" value="fl2">
+                <img src="http://localhost:3000/flaschen/anim/2.gif" alt="Glas2" />
+              </label>
+              <label>
+                <input type="radio" name="type" value="fl3">
+                <img src="http://localhost:3000/flaschen/anim/3.gif" alt="Glas3" />
+              </label>
+              <label>
+                <input type="radio" name="type" value="fl4">
+                <img src="http://localhost:3000/flaschen/anim/4.gif" alt="Plastik1" />
+              </label>
+              <label>
+                <input type="radio" name="type" value="fl5">
+                <img src="http://localhost:3000/flaschen/anim/5.gif" alt="Plastik2" />
+              </label>
+              <label>
+                <input type="radio" name="type" value="fl6">
+                <img src="http://localhost:3000/flaschen/anim/6.gif" alt="Plastik3" />
+              </label>
+            </div>
+
+
+            <style>
+              .flaschen-auswahl {
+              display: flex;
+              gap: 10px;
+              flex-wrap: wrap; /* optional für kleine Bildschirme */
+            }
+
+            .flaschen-auswahl label {
+              cursor: pointer;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            }
+
+            .flaschen-auswahl input[type="radio"] {
+              display: none;
+            }
+
+            .flaschen-auswahl img {
+              width: 60px; /* beliebige Größe */
+              height: auto;
+              opacity: 0.5;
+              transition: opacity 0.2s ease;
+              border: 2px solid transparent;
+              border-radius: 6px;
+            }
+
+            .flaschen-auswahl input[type="radio"]:checked + img {
+              opacity: 1;
+              border-color: #000; /* oder eine andere Farbe zur Hervorhebung */
+            }
+            </style>
+
+
+          <br />
+          <!-- Farbe auswählen -->
+          <label for="color">Farbe auswählen</label>
+          <form>
+            <label><input type="radio" name="color" value="cl1" checked> Schwarz</label><br />
+            <label><input type="radio" name="color" value="cl2"> Rot</label><br />
+            <label><input type="radio" name="color" value="cl3"> Blau</label><br />
+            <label><input type="radio" name="color" value="cl4"> Grün</label><br />
+            <label><input type="radio" name="color" value="cl5"> Lila</label><br />
+            <label><input type="radio" name="color" value="cl6"> Gelb</label>
+          </form>
+
+          <br /><br />
+          <button id="sendBtn">Nachricht senden</button>
+      </div>
+    </div>
+</div>
+
 <button id="neu">Neue Nachricht</button>
 
 
@@ -179,6 +192,8 @@
 </div>
 
 <button id="archivOpen" class="archivOpen"> </button>
+
+<div id="himmel"></div>
 
 
 
@@ -219,6 +234,13 @@ window.addEventListener("click", (event) => {
     
 
 
+const respInput = document.getElementById("respInput");
+
+respInput.addEventListener("input", () => {
+  respInput.style.height = "auto"; // Höhe zurücksetzen
+  respInput.style.height = respInput.scrollHeight + "px"; // Höhe anpassen
+});
+
 
 
 function loadMessages() {
@@ -236,12 +258,36 @@ function loadMessages() {
         const now = new Date();
 
         const typeToAnim = {
-          fl1: "http://localhost:3000/flaschen/anim/1w.gif",
-          fl2: "http://localhost:3000/flaschen/anim/2w.gif",
-          fl3: "http://localhost:3000/flaschen/anim/3w.gif",
-          fl4: "http://localhost:3000/flaschen/anim/4w.gif",
-          fl5: "http://localhost:3000/flaschen/anim/5w.gif",
-          fl6: "http://localhost:3000/flaschen/anim/6w.gif",
+          fl1: {
+            stark: "http://localhost:3000/flaschen/anim/1w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/1w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/1w.gif"     
+              },
+          fl2: {
+            stark: "http://localhost:3000/flaschen/anim/2w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/2w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/2w.gif"     
+              },
+          fl3: {
+            stark: "http://localhost:3000/flaschen/anim/3w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/3w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/3w.gif"     
+              },
+          fl4: {
+            stark: "http://localhost:3000/flaschen/anim/4w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/4w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/4w.gif"     
+              },
+          fl5: {
+            stark: "http://localhost:3000/flaschen/anim/5w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/5w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/5w.gif"     
+              },
+          fl6: {
+            stark: "http://localhost:3000/flaschen/anim/6w3p.gif",
+            mittel: "http://localhost:3000/flaschen/anim/6w2p.gif",
+            normal: "http://localhost:3000/flaschen/anim/6w.gif"     
+              },
         };
 
         const typeToImage = {
@@ -286,9 +332,18 @@ function loadMessages() {
           const time = new Date(msg.time);
           const hoursAgo = (now - time) / (1000 * 60 * 60);
 
+          let pixelLevel = "normal";
+          if (hoursAgo <= 24) {
+            pixelLevel = "normal";
+          } else if (hoursAgo <= 48) {
+            pixelLevel = "mittel";
+          } else if (hoursAgo <= 72) {
+            pixelLevel = "stark";
+          }
+
           const img = document.createElement("img");
           img.className = "msg-image";
-          img.src = typeToAnim[msg.type] || "";
+          img.src = typeToAnim[msg.type]?.[pixelLevel] || "";
           img.alt = `${msg.name} (${time.toLocaleString()})`;
           img.title = `${msg.name} (${time.toLocaleString()})`;
           img.style.cursor = "pointer";
@@ -298,7 +353,7 @@ function loadMessages() {
             modalFlasche.textContent = typeToName[msg.type];
             modalAbsender.textContent = "von " + msg.name;
             modalZeit.textContent = msg.time;
-            modalID.textContent = "Flaschenpost-ID: " + msg.idFlaschen
+            modalID.textContent = msg.idFlaschen;
             modal.style.display = "flex";
             modalContent.style.backgroundColor = msgCol[msg.color] || "#fff";
             modalContent.style.color = txtCol[msg.color];
@@ -307,12 +362,31 @@ function loadMessages() {
 
             //antworten holen
 
+            loadResponses(msg.idFlaschen);
 
+          });
 
+          if (hoursAgo <= 24) {
+            document.getElementById("row3").appendChild(img);
+          } else if (hoursAgo <= 48) {
+            document.getElementById("row2").appendChild(img);
+          } else if (hoursAgo <= 72) {
+            document.getElementById("row1").appendChild(img);
+          }
+          
+        });
+      } else {
+        messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
+      }
+    })
+    .catch(() => {
+      messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
+    });
 
+    
+}
 
-
-            function loadResponses(idFlaschen) {
+function loadResponses(idFlaschen) {
             const respBox = document.getElementById("respBox");
             const respAbs = document.getElementById("respAbs");
             respBox.innerHTML = ""; // vorherige Antworten löschen
@@ -350,35 +424,6 @@ function loadMessages() {
  //               });
             }
 
-            loadResponses(msg.idFlaschen);
-
-          });
-
-
-
-
-
-
-          if (hoursAgo <= 24) {
-            document.getElementById("row3").appendChild(img);
-          } else if (hoursAgo <= 48) {
-            document.getElementById("row2").appendChild(img);
-          } else if (hoursAgo <= 72) {
-            document.getElementById("row1").appendChild(img);
-          }
-          
-        });
-      } else {
-        messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
-      }
-    })
-    .catch(() => {
-      messagesDiv.textContent = "Fehler beim Laden der Nachrichten.";
-    });
-
-    
-}
-
 //NEUE NACHRICHT FENSER
 
 
@@ -389,8 +434,10 @@ openNeu.addEventListener("click", () => {
 // farbe nach auswahl anpassen
 
 const colorRadios = document.querySelectorAll('input[name="color"]');
+const typeRadios = document.querySelectorAll('input[name="type"]');
 const msgInput = document.getElementById('msgInput');
 const neueNachrichtFenster = document.getElementById("neueNachricht-modal-content");
+const flaschePreview = document.getElementById("flaschePreview");
 
 colorRadios.forEach(radio => {
   radio.addEventListener('change', () => {
@@ -418,6 +465,31 @@ colorRadios.forEach(radio => {
       case 'cl6': // Gelb
         neueNachrichtFenster.style.backgroundColor = 'rgb(210,178,50,0.5)';
         neueNachrichtFenster.style.color = 'rgb(0,0,0)';
+        break;
+    }
+  });
+});
+
+typeRadios.forEach(radio => {
+  radio.addEventListener('change', () => {
+    switch (radio.value) {
+      case 'fl1':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/1.gif"
+        break;
+      case 'fl2':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/2.gif"
+        break;
+      case 'fl3':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/3.gif"
+        break;
+      case 'fl4':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/4.gif"
+        break;
+      case 'fl5':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/5.gif"
+        break;
+      case 'fl6':
+        flaschePreview.src="http://localhost:3000/flaschen/anim/6.gif"
         break;
     }
   });
@@ -482,6 +554,7 @@ rows.forEach(row => {
           if (data.success) {
             msgInput.value = "";
             loadMessages();
+            neueNachricht.style.display = "none";
           } else {
             alert("Fehler beim Senden der Nachricht.");
           }
@@ -499,7 +572,7 @@ rows.forEach(row => {
       const msgResp = respInput.value.trim();
       
 
-      if (!respInput) {
+      if (!msgResp) {
         alert("Bitte Nachricht eingeben.");
         return;
       }
@@ -514,17 +587,21 @@ rows.forEach(row => {
           if (data.success) {
             respInput.value = "";
             loadMessages();
+            loadResponses(idParent);
+            respInput.style.height = "auto";
+            
           } else {
-            alert("Fehler beim Senden der Antwort.");
+            alert("Fehler im else beim Senden der Antwort.");
           }
         })
         .catch(() => {
-          alert("Fehler beim Senden der Antwort.");
+          alert("Fehler im catch beim Senden der Antwort.");
         });
+        
     });
 
 
-    //antwort holen
+    
 
 
 
@@ -569,7 +646,7 @@ const archivGrid = document.getElementById("archivGrid");
 const closeArchiv = document.getElementById("closeArchiv");
 
 // ÖFFNEN
-archivOpen.addEventListener("click", () => {
+
   archivGrid.innerHTML = ""; // leeren
 
 fetch("http://localhost:3000/api/messages")
@@ -604,11 +681,12 @@ fetch("http://localhost:3000/api/messages")
         const content = document.createElement("p");
         content.textContent = msg.msg;
 
-        const flasche = document.createElement("p");
-        flasche.textContent = `Flaschenpost-ID: ${msg.idFlaschen}`;
+        const flasche = document.createElement("small");
+        flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
+        
 
         const AntwortenA = document.createElement("div");
-        AntwortenA.textContent = "Antworten:";
+        AntwortenA.innerHTML = "<b>Antworten:</b>";
         
         card.appendChild(imgArch);
         card.appendChild(title);
@@ -662,29 +740,68 @@ fetch("http://localhost:3000/api/messages")
   })
 
 
-
     .catch(() => {
       archivGrid.innerHTML = "Fehler beim Laden des Archivs.";
       archivModal.style.display = "flex";
     });
-});
-
-
-
-
-
-
-
 
       });
-
-
-
-
 
     }
   
 loadArchive();
+
+//himmel updaten
+
+ function updateGradient() {
+      const now = new Date();
+const hour = now.getHours();
+
+let topColor, middleColor, bottomColor;
+
+if (hour < 6) {
+  // Nacht
+  topColor = '#060C29';
+  middleColor = '#3C3356';
+  bottomColor = '#3C3356';
+
+} else if (hour < 8) {
+  // Morgen
+  topColor = '#385CFF';
+  middleColor = '#FF723A';
+  bottomColor = '#FF723A';
+
+} else if (hour < 20) {
+  // Mittag
+  topColor = '#38ACFF';
+  middleColor = '#C1F4FF';
+  bottomColor = '#C1F4FF';
+
+} else if (hour < 22) {
+  // Abend
+  topColor = '#385CFF';
+  middleColor = '#FF723A';
+  bottomColor = '#FF723A';
+  
+} else {
+  // Nacht
+  topColor = '#060C29';
+  middleColor = '#3C3356';
+  bottomColor = '#3C3356';
+}
+
+document.body.style.background = `
+  linear-gradient(to bottom,
+    ${topColor} 0%,
+    ${middleColor} 50%,
+    ${bottomColor} 100%)
+`;
+    }
+
+    // Aktualisiere den Farbverlauf jede Minute
+    updateGradient();
+    setInterval(updateGradient, 60000);
+
 
 
 
@@ -695,11 +812,21 @@ loadArchive();
   body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #38ACFF, #C1F4FF, #ffffff);
+  /*background: linear-gradient(to bottom, #38ACFF, #C1F4FF, #ffffff);*/
   height: 100vh;
+  overflow: hidden;
   
 
   
+}
+
+#himmel {
+  height: 100%;
+  width: 100%;
+  z-index: -300;
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 #respBox {
@@ -734,33 +861,40 @@ loadArchive();
   object-fit: cover; /* Zuschneiden, damit es die Fläche gut ausfüllt */
   z-index: -100; /* Hinter dem Content */
   pointer-events: none; /* Klicks gehen durch das Video durch */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 }
 
 #bg video {
   pointer-events: none;
+  
 }
 
 #land img {
   position: fixed;
-  bottom: 42vh;
+  bottom: 41vh;
   right: 0;
   width: 580px;
   height: 300px; /* z.B. halbe Höhe */
   /*object-fit: fill; /* Zuschneiden, damit es die Fläche gut ausfüllt */
   z-index: -50; /* Hinter dem Content */
   pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
   
 }
 
 #schiff img {
   position: fixed;
-  bottom: 43vh;
+  bottom: 44vh;
   left: 1vw;
   width: 500px;
   height: 250px;
   z-index: -150;
   cursor: pointer;
   pointer-events: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
 
 }
 
@@ -818,7 +952,8 @@ position: relative;
 color: rgb(0, 0, 0);
 display: flex;
 word-wrap: break-word;
-border-radius: 40px;
+border-radius: 0px;
+border: 10px solid black;
 flex-direction: row;
 backdrop-filter: blur(30px);
 -webkit-backdrop-filter: blur(30px); /* Für Safari */
@@ -848,6 +983,24 @@ backdrop-filter: blur(30px);
   border-radius: 0px;
 }
 
+#antwortenScroll {
+  max-height: 300px; /* oder was du brauchst */
+  overflow-y: auto;
+  padding-right: 5px; /* optional, Platz für Scrollbar */
+  margin-top: 10px;
+  scroll-behavior: smooth;
+  
+}
+
+#antwortenScroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+#antwortenScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
 #msgBox {
   display: block;         /* Standard-Block-Layout */
   
@@ -860,11 +1013,27 @@ backdrop-filter: blur(30px);
   font-size: 16pt;
 }
 
+.resp-Wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
 #respInput {
-  flex: auto;
+  flex: 1;
   width: 30vw;
-  margin: 0px;
   resize: none;
+  border: 5px solid black;
+  font-size: medium;
+}
+
+#respBTN {
+  flex-shrink: 0;
+  height: 100%;
+  width: 30px;
+  border: 5px solid black;
 }
 
 
@@ -895,15 +1064,15 @@ border-radius: 20px;
   background-color: rgba(0, 0, 0, 0);
   justify-content: center;
   align-items: center;
-  
 }
 
 /* Modal-Inhalt NEUE NACHRICHT */
 #neueNachricht-modal-content {
   padding: 40px;
-  border-radius: 6px;
-  max-width: 70vw;
-  max-height: 70vh;
+  border-radius: 0px;
+  border: 10px solid black;
+  width: 60vw;
+  height: 70vh;
   overflow-y: auto;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   position: relative;
@@ -911,6 +1080,31 @@ border-radius: 20px;
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px); /* Für Safari */
 
+  color: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: row;
+
+}
+
+
+
+#neuLinks {
+  flex: 1;                 /* 1 Anteil → schmaler */
+  padding: 10px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
+  
+}
+
+#neuRechts {
+  flex: 2;                 /* 2 Anteile → breiter */
+  padding: 10px;
+  max-width: 40vw;
+  flex-direction: column;
+}
+
+#flaschePreview {
+  height: 100%;
 }
 
 /* Schließen-Button */
@@ -973,6 +1167,7 @@ border-radius: 20px;
   transform: translateY(2vh);
   z-index: 50;
   scroll-behavior: smooth;
+  position: relative;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -1019,6 +1214,7 @@ border-radius: 20px;
   justify-content: space-evenly;
   z-index: 40;
   scroll-behavior: smooth;
+  position: relative;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -1066,6 +1262,7 @@ border-radius: 20px;
   z-index: 30;
   transform: translateY(-50px);
   scroll-behavior: smooth;
+  position: relative;
 
   overflow-x: scroll;   /* immer Scrollbar reservieren! */
   overflow-y: hidden;
@@ -1131,7 +1328,8 @@ border-radius: 20px;
   height: 80vh;
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
+  border-radius: 0px;
+  border: 10px solid black;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1164,7 +1362,8 @@ border-radius: 20px;
 /* Einzelne Nachricht */
 .archivCard {
   border: 0px solid #ffffff;
-  border-radius: 12px;
+  border-radius: 0px;
+  border: 5px solid black;
   background-color: #ffffff;
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);

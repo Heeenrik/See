@@ -110,7 +110,11 @@ server.post("/api/responses", (req, res) => {
         message: "Fehler beim Antworten",
       });
     }
-    res.json({ success: true, id: result.insertId });
+    res.json({
+      success: true,
+      message: "Antwort gespeichert",
+      id: result.insertId,
+    });
   });
 });
 
