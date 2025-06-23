@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Flaschenpost DEV</title>
+  <title>Flaschenpost LOCAL</title>
   <style>
 
   </style>
@@ -11,7 +11,54 @@
 
 
 <!-- LEISTE -->
-<div id="leiste"></div>
+<div id="leiste" class="leiste">
+  <button id="neu">
+    <img src="http://localhost:3000/tasche.png">
+  </button>
+  <!--<input type="text" id="idSearchInput" placeholder="Flaschenpost-ID suchen">
+<button onclick="searchById()">Suchen</button>-->
+</div>
+
+
+
+<style>
+  .leiste {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5vh;
+    background-color: white;
+    border-top: 5px solid black;
+    z-index: 1000;
+    image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  }
+
+  #neu {
+    width: 30vw;
+    position: absolute;
+    bottom: -20vh; /* hebt den Button über die Leiste */
+    right: -5vw;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.2s;
+    transform-origin: 50% 100%;
+  }
+
+  #neu img {
+    width: 100%;
+  }
+
+  #neu:hover {
+    transform: scale(1.5);
+    rotate: -15deg;
+  }
+</style>
+
+
 
 
 
@@ -237,12 +284,12 @@
             }
             </style>
         
-          <button id="sendBtn">Nachricht senden</button>
+          <button id="sendBtn">Flasche auf Reise schicken</button>
       </div>
     </div>
 </div>
 
-<button id="neu">Neue Nachricht</button>
+
 
 
 <div id="archivModal" class="archivModal" style="font-family: pixel;">
@@ -443,6 +490,8 @@ function loadMessages() {
 
           });
 
+          
+
           if (hoursAgo <= 24) {
             document.getElementById("row3").appendChild(img);
           } else if (hoursAgo <= 48) {
@@ -462,6 +511,9 @@ function loadMessages() {
 
     
 }
+
+
+
 
 function loadResponses(idFlaschen) {
             const respBox = document.getElementById("respBox");
@@ -500,6 +552,11 @@ function loadResponses(idFlaschen) {
  //                 respBox.textContent = "Fehler beim Laden der Antworten.";
  //               });
             }
+
+
+
+
+
 
 //NEUE NACHRICHT FENSER
 
@@ -1003,9 +1060,10 @@ html {
   margin: 0;             /* Kein Außenabstand */
   cursor: pointer;       /* Mauszeiger zeigt Klick an */
   width: 300px;          /* Breite des Buttons */
-  height: 100px;          /* Höhe des Buttons */
+  height: 140px;          /* Höhe des Buttons */
   opacity: 0%;            /* komplett unsichtbar */
-  bottom: 52vh;
+  bottom: 50vh;
+  left: 7vw;
   position: fixed;    /* falls nötig */
 }
 
@@ -1176,7 +1234,7 @@ margin-left: 2vw;
 }
 
 #nameInput {
-  width: 100%;
+  width: 97%;
   font-size: 30pt;
   font-family: "pixel";
   padding: 8px;
@@ -1185,7 +1243,7 @@ margin-left: 2vw;
 }
 
 #msgInput {
-  width: 100%;
+  width: 97%;
   font-size: 30pt;
   font-family: "pixel";
   padding: 8px;
@@ -1260,6 +1318,10 @@ margin-left: 2vw;
   font-family: "pixel";
   font-size: 30pt;
   cursor: pointer;
+}
+
+#sendBtn:hover {
+  background-color: #338bde;
 }
 
 /* Schließen-Button */
@@ -1416,7 +1478,7 @@ margin-left: 2vw;
   height: 25vh;
   justify-content: space-evenly;
   z-index: 30;
-  transform: translateY(-50px);
+  transform: translateY(-20px);
   scroll-behavior: smooth;
   position: relative;
 
