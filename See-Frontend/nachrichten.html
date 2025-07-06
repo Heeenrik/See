@@ -10,52 +10,219 @@
 <body>
 
 
-<!-- LEISTE -->
-<div id="leiste" class="leiste">
-  <button id="neu">
-    <img src="http://localhost:3000/tasche.png">
-  </button>
-  <!--<input type="text" id="idSearchInput" placeholder="Flaschenpost-ID suchen">
-<button onclick="searchById()">Suchen</button>-->
+
+<button id="neu"></button>
+<img id="neuTasche" src="http://localhost:3000/tasche.png">
+
+
+<div id="InfoContainer">
+  <p id="Info" style="display: inline-block;">System bereit!</p>
+</div>
+
+<button id="impressum">
+    Impressum
+</button>
+
+
+
+<div id="impressumModal">
+  <div id="impressumModalContent">
+    <div id="impressumModalX">
+          <img src="http://localhost:3000/x.png">
+        </div>
+
+    <p>Entwickelt von Henrik Haasler im Rahmen von “Stay a while and listen”</p>
+    <p>SoSe 2025</p>
+    <p>Lehrauftrag: Johannes Schmoll</p>
+    <img src="http://localhost:3000/logo.png" id="logoUdK">
+
+  </div>
 </div>
 
 
 
 <style>
+
+  
+
+  #impressumModal {
+    display: none; /* versteckt */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0);
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Modal-Inhalt NEUE NACHRICHT */
+  #impressumModalContent {
+    padding: 20px;
+    border-radius: 0px;
+    border: 10px solid black;
+    width: 60vw;
+    height: 70vh;
+    overflow-y: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    position: relative;
+    background-color: rgb(40,40,40,0.5);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px); /* Für Safari */
+
+    color: rgb(255, 255, 255);
+    
+    font-size: 28pt;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+  }
+
+  #impressumModalX {
+    position: relative;
+    top: -30px;
+    left: -30px;
+
+    height: 5vh;
+    width: 5vh;
+    border: 10px solid black;
+
+    cursor: pointer;
+    pointer-events: auto;
+
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+  }
+
+  #impressumModalX img {
+    width: 100%;
+  }
+
+  #logoUdK {
+    position: absolute;
+    bottom: 20px;
+  }
+
+  #impressumModalContent p {
+  margin: 5px 0;
+}
+
   .leiste {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 5vh;
-    background-color: white;
-    border-top: 5px solid black;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0);
+    border-top: 0px solid black;
     z-index: 1000;
     image-rendering: pixelated;
-  image-rendering: crisp-edges;
+    image-rendering: crisp-edges;
+    pointer-events: none;
   }
 
-  #neu {
-    width: 30vw;
+  #neuTasche {
+    width: 25vw;
     position: absolute;
-    bottom: -20vh; /* hebt den Button über die Leiste */
-    right: -5vw;
+    bottom: -13vh; /* hebt den Button über die Leiste */
+    right: -2vw;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
     transition: 0.2s;
     transform-origin: 50% 100%;
+    z-index: 500;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    pointer-events: none;
   }
 
-  #neu img {
-    width: 100%;
+    #neu {
+    width: 30vw;
+    position: absolute;
+    bottom: 0vh; /* hebt den Button über die Leiste */
+    height: 8vh;
+    width: 25vw;
+    right: -0vw;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 1000;
+ 
   }
 
-  #neu:hover {
+
+  #neu:hover + #neuTasche {
     transform: scale(1.5);
     rotate: -15deg;
   }
+
+
+  #impressum {
+    height: 5vh;
+    width: 150px;
+    position: absolute;
+    top: 0vh; /* hebt den Button über die Leiste */
+    right: 0px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+    font-family: pixel;
+    font-size: 28pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+  }
+
+
+
+  #impressum img {
+    width: 100%;
+  }
+
+  #how {
+    height: 5vh;
+    width: 150px;
+    position: absolute;
+    bottom: 0vh; /* hebt den Button über die Leiste */
+    left: 150px;
+    background: none;
+    border-left: none;
+    border-right: 4px solid black;
+    border-top: none;
+    border-bottom: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-block;
+    font-family: pixel;
+    font-size: 28pt;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+  }
+
+  #how:hover {
+    background-color: #d7d7d7;
+  }
+
+  #Info {
+    position: absolute;
+    display: none;
+    bottom: -3.6vh;
+    left: 325px;
+    font-size: 28pt;
+  }
+
+
+
+
 </style>
 
 
@@ -64,9 +231,40 @@
 
     <!-- Modal -->
 <div id="modal" class="modal" style="font-family: pixel;">
+
+     
+
   <div class="modal-content" id="modal-content">
    <!-- <button class="close-btn" id="closeModal">&times;</button> -->
     
+    <div id="modalX">
+          <img src="http://localhost:3000/x.png">
+        </div>
+
+        <style>
+          #modalX {
+            position: relative;
+            top: -20px;
+            left: -20px;
+
+            height: 5vh;
+            width: 5vh;
+            border: 10px solid black;
+
+            cursor: pointer;
+            pointer-events: auto;
+
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+          }
+
+          #modalX img {
+            width: 100%;
+            height: 100%;
+          }
+        </style>
+
     
     
     <div id="links">
@@ -80,8 +278,8 @@
       <div id="flascheName" style="font-size: 40pt; display: inline-block;"></div>
       <div id="modalAbsender" style="font-size: 40pt; display: inline-block;"></div>
       <div id="modalZeit"></div>
-      <div style="display: inline-block;">Flaschenpost-ID: </div>
-      <div id="modalIdFlaschen" style="display: inline-block;"></div>
+      <!--FLASCHENPOST ID <div style="display: inline-block;">Flaschenpost-ID: </div> -->
+      <div id="modalIdFlaschen" style="display: inline-block; visibility: hidden;"></div>
       <div id="scrollContent">
         <div id="msgBox">
           <div id="modalText" style="padding: 0px; font-size: 30pt;"></div>
@@ -111,15 +309,31 @@
 <!-- Hintergrund -->
 <div id="hintergrund">
   <!--<video autoplay muted loop playsinline class="bg" id="bg">
-  <source src="http://localhost:3000/flaschen/wasser.mp4" type="video/mp4" />-->
+  <source src="http://localhost:3000/flaschen/wasser.mp4" type="video/mp4" /></video>-->
   <img src="http://localhost:3000/flaschen/wasser.gif" class="bg" id="bg" style="width: 100vw; height: 50vh;">
   
-</video>
-<div id="land">
-  <img src="http://localhost:3000/flaschen/land.png">
-</div>
 
+  <div id="land">
+    <img src="http://localhost:3000/flaschen/land.png">
+  </div>
 
+  <div id="insel">
+    <img src="http://localhost:3000/insel.gif">
+  </div>
+
+  <!-- Sbahn düüüüüdüüüüdüüüüüüüüüüüüü -->
+
+  <script>
+        function play() {
+          var audio = document.getElementById("audio");
+          audio.play();
+        }
+  </script>
+
+    <input id="sBahnTrigger" type="button" onclick="play()">
+    <audio id="audio" src="http://localhost:3000/tuersignal.mp3"></audio>
+
+  <div id="nachtOverlay"></div>
 
 
 </div>
@@ -136,10 +350,77 @@
 
 <div id="neueNachricht" class="modal">
   
-    
+       
 
     
       <div id="neueNachricht-modal-content" style="background-color: rgba(255,255,255,0.5); color: black; font-family: pixel;">
+
+         <div id="neuX">
+          <img src="http://localhost:3000/x.png">
+        </div>
+
+        <style>
+
+          #nachtOverlay {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100vw;
+            height: 50vh; /* gleiche Höhe wie das Wasser */
+            background: rgba(0, 0, 0, 0.2); /* halbtransparent schwarz */
+            pointer-events: none; /* lässt Klicks durch */
+            z-index: 2; /* über dem Wasser, unter UI */
+            display: absolute; /* nur nachts anzeigen */
+            z-index: -40;
+            mix-blend-mode: multiply;
+          }
+
+          #sBahnTrigger {
+            position: absolute;
+            right: 0;
+            top: 32vh;
+            height: 8vh;
+            width: 15vw;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+          }
+
+          #insel img {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: auto;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            z-index: 200;
+            pointer-events: none;
+          }
+
+          #neuX {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+
+            height: 5vh;
+            width: 5vh;
+            border: 10px solid black;
+
+            cursor: pointer;
+            pointer-events: auto;
+
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+          }
+
+          #neuX img {
+            width: 100%;
+            height: 100%;
+          }
+        </style>
+
         <!-- Textareas -->
         <div id="neuLinks">
           <img src="http://localhost:3000/flaschen/anim/1.gif" id="flaschePreview"/>
@@ -204,7 +485,7 @@
               height: auto;
               opacity: 0.5;
               transition: opacity 0.2s ease;
-              border: 3px solid transparent;
+              border: 5px solid transparent;
               border-radius: 0px;
             }
 
@@ -293,8 +574,136 @@
 
 
 <div id="archivModal" class="archivModal" style="font-family: pixel;">
+
+
+
   <div class="modal-content-archiv">
     
+  <div id="archivHeader">
+    <div id="archivX">
+      <img src="http://localhost:3000/x.png">
+    </div>
+    <input type="text" id="archivSearch" placeholder="Nach Absender Suchen">
+  </div>
+    
+
+        <style>
+
+          #archivHeader {
+            position: sticky;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: 100;
+            align-items: center;
+            justify-content: space-between; 
+            height: 5vh;
+            width: 100%;
+          }
+
+          #archivSearch {
+            
+            
+            width: 100%; 
+
+            font-size: 25pt;
+            font-family: pixel;
+            top: -0px;
+            left: -0px;
+            
+            position: absolute;
+
+            height: 5vh;
+            border: solid black;
+            border-width: 10px;
+            border-left: none;
+            padding-left: 2vh;
+            transform: translate(30px, -32px);
+          }
+
+          #archivSearch:focus {
+            outline: none;
+            box-shadow: none;
+            border-color: none; /* oder was du willst */
+          }
+
+          #archivX {
+            position: absolute;
+            top: -0px;
+            left: -0px;
+
+            height: 5vh;
+            width: 5vh;
+            border: 10px solid black;
+            cursor: pointer;
+            pointer-events: auto;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+
+            transform: translate(-30px, -30px);
+
+            z-index: 500;
+
+          }
+
+          #archivX img {
+            width: 100%;
+            height: 100%;
+          }
+
+          #sonne, #mond {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            
+            border-radius: 50%;
+            
+            z-index: -1000;
+            left: 47vw;
+          }
+
+          #sonne img, #mond img {
+            position: absolute;
+            width: 100%;
+            transform-origin: center;
+            transform: scale(3);
+
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+          }
+
+          #stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2000;
+            background: transparent;
+            overflow: hidden;
+          }
+
+          .star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 2s infinite;
+            z-index: -2000;
+          }
+
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+          }
+
+
+        </style>
+
+
     <div id="archivGrid"></div>
   </div>
 </div>
@@ -306,7 +715,13 @@
 
 
 <div id="himmel"></div>
-
+<div id="sonne">
+  <img src="http://localhost:3000/sonne.png">
+</div>
+<div id="mond">
+  <img src="http://localhost:3000/mond.png">
+</div>
+<div id="sterne"></div>
 
 
 
@@ -326,11 +741,17 @@
     const respBtn = document.getElementById("respBtn");
     const modalContent = document.getElementById("modal-content")
     const schiff = document.querySelector("#schiff img");
-
     const newMsg = document.getElementById("msgInput");
     const colorRadio = document.getElementById("color");
+    const info = document.getElementById("Info");
+    const impressumOpen = document.getElementById("impressum");
+    const archivSearch = document.getElementById("archivSearch");
+
+    
 
 
+
+    
 window.addEventListener("click", (event) => {
   if (event.target === modal) {
     modal.style.display = "none";
@@ -341,9 +762,68 @@ window.addEventListener("click", (event) => {
   const archivModal = document.getElementById("archivModal");
   if (event.target === archivModal) {
     archivModal.style.display = "none";
+    archivSearch.value = "";
+  }
+  const impressumModal = document.getElementById("impressumModal");
+  if (event.target === impressumModal) {
+    impressumModal.style.display = "none";
   }
 });
-    
+
+
+//archiv schließen
+
+document.addEventListener("DOMContentLoaded", () => {
+  const archivX = document.getElementById("archivX");
+  const archivModal = document.getElementById("archivModal");
+
+  archivX.addEventListener("click", () => {
+    archivModal.style.display = "none";
+    archivSearch.value = "";
+  });
+});
+
+//neue nachricht schließen
+
+document.addEventListener("DOMContentLoaded", () => {
+  const neuX = document.getElementById("neuX");
+
+  neuX.addEventListener("click", () => {
+    neueNachricht.style.display = "none";
+    msgInput.value = "";
+    nameInput.value = "";
+  });
+});
+
+//flasche schließen
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modalX = document.getElementById("modalX");
+
+  modalX.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+});
+
+//impressum schließen
+
+document.addEventListener("DOMContentLoaded", () => {
+  const impressumModalX = document.getElementById("impressumModalX");
+
+  impressumModalX.addEventListener("click", () => {
+    impressumModal.style.display = "none";
+  });
+});
+
+
+
+//impressum öffnen
+
+impressumOpen.addEventListener("click", () => {
+  impressumModal.style.display = "flex";
+});
+
+
 
 
 const respInput = document.getElementById("respInput");
@@ -352,6 +832,32 @@ respInput.addEventListener("input", () => {
   respInput.style.height = "auto"; // Höhe zurücksetzen
   respInput.style.height = respInput.scrollHeight + "px"; // Höhe anpassen
 });
+
+
+// Typewriter Effekt für nachrichten
+
+
+let currentTypewriterSession = 0;
+
+function startTypewriter(text, delay = 30) {
+  const session = ++currentTypewriterSession; // neue Session-ID
+  modalText.textContent = "";
+  let i = 0;
+
+  function typeNext() {
+    // Abbrechen, wenn eine neue Session gestartet wurde
+    if (session !== currentTypewriterSession) return;
+
+    if (i < text.length) {
+      modalText.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeNext, delay);
+    }
+  }
+
+  typeNext();
+}
+
 
 
 
@@ -368,6 +874,8 @@ function loadMessages() {
         document.getElementById("row3").innerHTML = ""; // 48–72h
 
         const now = new Date();
+
+        info.textContent = data.messages.length + " Flaschen im Archiv";
 
         const typeToAnim = {
           fl1: {
@@ -463,7 +971,7 @@ function loadMessages() {
           img.style.cursor = "pointer";
 
           img.addEventListener("click", () => {
-            modalText.textContent = msg.msg;
+            startTypewriter(msg.msg);
             modalFlasche.textContent = typeToName[msg.type];
             modalAbsender.textContent = "von " + msg.name;
             //modalAbsender.innerHTML = 'von <strong>' + msg.name + '</strong>';
@@ -477,7 +985,9 @@ function loadMessages() {
             });
 
             modalZeit.textContent = formattedTime;
+            //FLASCHENPOST ID
             modalID.textContent = msg.idFlaschen;
+
             modal.style.display = "flex";
             modalContent.style.backgroundColor = msgCol[msg.color] || "#fff";
             modalContent.style.color = txtCol[msg.color];
@@ -691,6 +1201,7 @@ rows.forEach(row => {
         .then(data => {
           if (data.success) {
             msgInput.value = "";
+            nameInput.value = "";
             loadMessages();
             neueNachricht.style.display = "none";
           } else {
@@ -745,151 +1256,147 @@ rows.forEach(row => {
 
 
     //ARCHIV ÖFFNEN
-    function loadArchive() {
+function loadArchive() {
+  const archivOpen = document.getElementById("archivOpen");
+  const archivModal = document.getElementById("archivModal");
+  const archivGrid = document.getElementById("archivGrid");
+  const archivSearch = document.getElementById("archivSearch");
 
-        const archivDiv = document.getElementById("archiv");
-        const archivOpen = document.getElementById("archivOpen");
+  const typeToImage = {
+    fl1: "http://localhost:3000/flaschen/anim/1.gif",
+    fl2: "http://localhost:3000/flaschen/anim/2.gif",
+    fl3: "http://localhost:3000/flaschen/anim/3.gif",
+    fl4: "http://localhost:3000/flaschen/anim/4.gif",
+    fl5: "http://localhost:3000/flaschen/anim/5.gif",
+    fl6: "http://localhost:3000/flaschen/anim/6.gif",
+  };
 
-        const typeToImage = {
-          fl1: "http://localhost:3000/flaschen/anim/1.gif",
-          fl2: "http://localhost:3000/flaschen/anim/2.gif",
-          fl3: "http://localhost:3000/flaschen/anim/3.gif",
-          fl4: "http://localhost:3000/flaschen/anim/4.gif",
-          fl5: "http://localhost:3000/flaschen/anim/5.gif",
-          fl6: "http://localhost:3000/flaschen/anim/6.gif",
-        };
+  const msgCol = {
+    cl0: "rgb(255,255,255,0.5)",
+    cl1: "rgb(40,40,40,0.5)",
+    cl2: "rgb(220,50,50,0.5)",
+    cl3: "rgb(55,180,220,0.5)",
+    cl4: "rgb(56,220,90,0.5)",
+    cl5: "rgb(212,55,220,0.5)",
+    cl6: "rgb(220,180,50,0.5)",
+  };
 
-        const msgCol = {
-          cl0: "rgb(255,255,255,0.5)",
-          cl1: "rgb(40,40,40,0.5)",       // schwarz
-          cl2: "rgb(220,50,50,0.5)",      // rot
-          cl3: "rgb(55,180,220,0.5)",     // blau
-          cl4: "rgb(56,220,90,0.5)",      // grün
-          cl5: "rgb(212,55,220,0.5)",     // lila
-          cl6: "rgb(220,180,50,0.5)",     // gelb
-        };
+  const txtCol = {
+    cl0: "rgb(0,0,0)",
+    cl1: "rgb(255,255,255)",
+    cl2: "rgb(255,255,255)",
+    cl3: "rgb(0,0,0)",
+    cl4: "rgb(0,0,0)",
+    cl5: "rgb(255,255,255)",
+    cl6: "rgb(0,0,0)",
+  };
 
-        const txtCol = {
-          cl0: "rgb(0,0,0)",
-          cl1: "rgb(255,255,255)",    // schwarz
-          cl2: "rgb(255,255,255)",    // rot
-          cl3: "rgb(0,0,0)",          // blau
-          cl4: "rgb(0,0,0)",          // grün
-          cl5: "rgb(255,255,255)",    // lila
-          cl6: "rgb(0,0,0)",          // gelb
-        };
+  let allMessages = []; // globaler Speicher für Filterung
 
   archivOpen.addEventListener("click", () => {
-
-const archivModal = document.getElementById("archivModal");
-const archivGrid = document.getElementById("archivGrid");
-const closeArchiv = document.getElementById("closeArchiv");
-
-// ÖFFNEN
-
-  archivGrid.innerHTML = ""; // leeren
-
-fetch("http://localhost:3000/api/messages")
-  .then(res => res.json())
-  .then(data => {
-    if (data.success && data.messages.length > 0) {
-      // Sortieren: Neueste zuerst
-      data.messages.sort((a, b) => new Date(b.time) - new Date(a.time));
-
-      data.messages.forEach(msg => {
-        const card = document.createElement("div");
-        card.className = "archivCard";
-        card.style.backgroundColor = msgCol[msg.color];
-        card.style.color = txtCol[msg.color];
-
-        const imgArch = document.createElement("img");
-        imgArch.src = typeToImage[msg.type];
-
-        const title = document.createElement("p");
-
-        //zeitformat konvertieren
-        const formattedTime = new Date(msg.time).toLocaleString("de-DE", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-
-        title.innerHTML = `von <b>${msg.name}</b> am <b>${formattedTime}</b>`;
-
-        const content = document.createElement("p");
-        content.textContent = msg.msg;
-
-        const flasche = document.createElement("small");
-        flasche.classList.add("id-label");
-        flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
-        
-
-        const AntwortenA = document.createElement("div");
-        AntwortenA.innerHTML = "<b>Antworten:</b>";
-        
-        card.appendChild(imgArch);
-        card.appendChild(title);
-        card.appendChild(content);
-        card.appendChild(AntwortenA);
-
-
-        const respBoxArch = document.createElement("small");
-        respBoxArch.className = "responses-container-archive";
-        card.appendChild(respBoxArch);
-
-        card.appendChild(flasche);
-
-//antworten im archiv
-
-        fetch("http://localhost:3000/api/responses")
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              const responses = data.messages.filter(resp => resp.idParent == msg.idFlaschen);
-
-              if (responses.length === 0) {
-                respBoxArch.textContent = "keine Antworten :(";
-                return;
-              }
-
-              responses.forEach(resp => {
-                const respEl = document.createElement("p");
-                respEl.className = "response";
-                respEl.textContent = resp.msgResp;
-                respBoxArch.appendChild(respEl);
-
-                //const spacer = document.createElement("br");
-                //respBoxArch.appendChild(spacer);
-        });
-            } else {
-              respBox.textContent = "fehler.";
-            }
-          })
-            
-//ende
-
-
-        archivGrid.appendChild(card);
-      });
-    } else {
-      archivGrid.innerHTML = "Keine Nachrichten im Archiv.";
-    }
-
+    archivGrid.innerHTML = "";
     archivModal.style.display = "flex";
-  })
 
+    fetch("http://localhost:3000/api/messages")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.messages.length > 0) {
+          data.messages.sort((a, b) => new Date(b.time) - new Date(a.time));
+          allMessages = data.messages; // für Suche merken
+          renderArchivCards(allMessages);
+        } else {
+          archivGrid.innerHTML = "Keine Nachrichten im Archiv.";
+        }
+      })
+      .catch(() => {
+        archivGrid.innerHTML = "Fehler beim Laden des Archivs.";
+      });
+  });
 
-    .catch(() => {
-      archivGrid.innerHTML = "Fehler beim Laden des Archivs.";
-      archivModal.style.display = "flex";
-    });
+archivSearch.addEventListener("input", () => {
+  const query = archivSearch.value.trim().toLowerCase();
 
+  if (query === "") {
+    // Suchfeld leer: Alle Nachrichten anzeigen
+    renderArchivCards(allMessages);
+  } else {
+    // Filtere Nachrichten, nur wenn msg.name existiert, sonst leerer String
+    const filtered = allMessages.filter(msg =>
+      (msg.name || "").toLowerCase().includes(query)
+    );
+    renderArchivCards(filtered);
+  }
+});
+
+  function renderArchivCards(messages) {
+    archivGrid.innerHTML = "";
+
+    messages.forEach(msg => {
+      const card = document.createElement("div");
+      card.className = "archivCard";
+      card.style.backgroundColor = msgCol[msg.color];
+      card.style.color = txtCol[msg.color];
+
+      const imgArch = document.createElement("img");
+      imgArch.src = typeToImage[msg.type];
+
+      const formattedTime = new Date(msg.time).toLocaleString("de-DE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
       });
 
-    }
-  
+      const title = document.createElement("p");
+      title.innerHTML = `von <b>${msg.name}</b> am <b>${formattedTime}</b>`;
+
+      const content = document.createElement("p");
+      content.textContent = msg.msg;
+
+      const flasche = document.createElement("small");
+      flasche.classList.add("id-label");
+      flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
+
+      const AntwortenA = document.createElement("div");
+      AntwortenA.innerHTML = "<b>Antworten:</b>";
+
+      const respBoxArch = document.createElement("small");
+      respBoxArch.className = "responses-container-archive";
+
+      card.appendChild(imgArch);
+      card.appendChild(title);
+      card.appendChild(content);
+      card.appendChild(AntwortenA);
+      card.appendChild(respBoxArch);
+      card.appendChild(flasche);
+
+      // Antworten laden
+      fetch("http://localhost:3000/api/responses")
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const responses = data.messages.filter(resp => resp.idParent == msg.idFlaschen);
+            if (responses.length === 0) {
+              respBoxArch.textContent = "keine Antworten :(";
+              return;
+            }
+            responses.forEach(resp => {
+              const respEl = document.createElement("p");
+              respEl.className = "response";
+              respEl.textContent = resp.msgResp;
+              respBoxArch.appendChild(respEl);
+            });
+          } else {
+            respBoxArch.textContent = "fehler.";
+          }
+        });
+
+      archivGrid.appendChild(card);
+    });
+  }
+}
+
 loadArchive();
 
 //himmel updaten
@@ -906,29 +1413,39 @@ if (hour < 6) {
   middleColor = '#3C3356';
   bottomColor = '#3C3356';
 
+  impressumOpen.style.color = "#ffffff"
+
 } else if (hour < 8) {
   // Morgen
   topColor = '#385CFF';
   middleColor = '#FF723A';
   bottomColor = '#FF723A';
 
-} else if (hour < 20) {
+  impressumOpen.style.color = "#000000"
+
+} else if (hour < 20) { //20
   // Mittag
   topColor = '#38ACFF';
   middleColor = '#C1F4FF';
   bottomColor = '#C1F4FF';
+
+  impressumOpen.style.color = "#000000"
 
 } else if (hour < 22) {
   // Abend
   topColor = '#385CFF';
   middleColor = '#FF723A';
   bottomColor = '#FF723A';
+
+  impressumOpen.style.color = "#000000"
   
 } else {
   // Nacht
   topColor = '#060C29';
   middleColor = '#3C3356';
   bottomColor = '#3C3356';
+
+  impressumOpen.style.color = "#ffffff"
 }
 
 document.body.style.background = `
@@ -941,10 +1458,78 @@ document.body.style.background = `
 
     // Aktualisiere den Farbverlauf jede Minute
     updateGradient();
-    setInterval(updateGradient, 60000);
 
 
+  function updateCelestials() {
+    const sun = document.getElementById("sonne");
+    const moon = document.getElementById("mond");
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes() / 60;
 
+    const horizonY = window.innerHeight * 0.5;
+    const maxArcHeight = horizonY - 100;
+
+    // Sonne
+    if (hour >= 6 && hour <= 22) {
+      const percent = (hour - 6) / 12;
+      const arc = Math.sin(percent * Math.PI);
+      const sunY = horizonY - (arc * maxArcHeight) - 40;
+      sun.style.top = `${sunY}px`;
+      sun.style.display = "block";
+      moon.style.display = "none";
+    }
+    // Mond
+    else {
+      let percent;
+      if (hour > 22) {
+        percent = (hour - 22) / 12; // 18–24 → 0–0.5
+      } else {
+        percent = (hour + 6) / 12;  // 0–6 → 0.5–1
+      }
+      const arc = Math.sin(percent * Math.PI);
+      const moonY = horizonY - (arc * maxArcHeight) - 40;
+      moon.style.top = `${moonY}px`;
+      moon.style.display = "block";
+      sun.style.display = "none";
+    }
+  }
+
+  updateCelestials();
+  setInterval(updateCelestials, 60 * 1000); // jede Minute aktualisieren
+
+
+  function isNightTime() {
+  const hour = new Date().getHours();
+  return hour >= 21 || hour < 6; // z. B. 21:00 – 6:00 = Nacht
+}
+
+function generateStars(count = 100) {
+  const starsContainer = document.getElementById("sterne");
+  starsContainer.innerHTML = ""; // alte Sterne löschen
+
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.animationDelay = `${Math.random() * 3}s`;
+    starsContainer.appendChild(star);
+  }
+}
+
+function toggleStars() {
+  const stars = document.getElementById("stars");
+  if (isNightTime()) {
+    generateStars(150);  // Anzahl kannst du anpassen
+    stars.style.display = "block";
+  } else {
+    stars.innerHTML = "";
+    stars.style.display = "none";
+  }
+}
+
+toggleStars();
+setInterval(toggleStars, 60000); // jede Minute neu prüfen
 
 </script>
 
@@ -1001,6 +1586,7 @@ html {
 
 #hintergrund {
   pointer-events: auto;
+  z-index: -50;
 }
 
 #bg {
@@ -1030,7 +1616,7 @@ html {
   width: 580px;
   height: 300px; /* z.B. halbe Höhe */
   /*object-fit: fill; /* Zuschneiden, damit es die Fläche gut ausfüllt */
-  z-index: -50; /* Hinter dem Content */
+  z-index: -30; /* Hinter dem Content */
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
@@ -1039,17 +1625,17 @@ html {
 
 #schiff img {
   position: fixed;
-  bottom: 44vh;
+  bottom: 42vh;
   left: 1vw;
   width: 500px;
   height: 250px;
-  z-index: -150;
+  z-index: 150;
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* für zusätzliche Kompatibilität */
   transition: transform 0.1s;
-  transform-origin: 50% 80%;
+  transform-origin: 50% 78%;
 }
 
 
@@ -1132,7 +1718,16 @@ backdrop-filter: blur(30px);
   padding: 10px;
   max-width: 40vw;
   overflow-y: auto;
-  
+}
+
+#rechts::-webkit-scrollbar {
+  width: 6px;
+  background: transparent; /* track */
+}
+
+#rechts::-webkit-scrollbar-thumb {
+  width: 6px;
+  background: #000000; /* track */
 }
 
 .modal-content::-webkit-scrollbar {
@@ -1159,7 +1754,7 @@ backdrop-filter: blur(30px);
 
 #antwortenScroll::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 #msgBox {
@@ -1191,6 +1786,13 @@ backdrop-filter: blur(30px);
   font-size: 24pt;
   background-color: #ffffff;
   padding-left: 10px;
+  
+}
+
+  #respInput:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: none;
 }
 
 #respBtn {
@@ -1238,17 +1840,31 @@ margin-left: 2vw;
   font-size: 30pt;
   font-family: "pixel";
   padding: 8px;
-  border: 3px solid black;
+  border: 5px solid black;
   background-color: white;
+
 }
+
+  #nameInput:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: none;
+}
+
 
 #msgInput {
   width: 97%;
   font-size: 30pt;
   font-family: "pixel";
   padding: 8px;
-  border: 3px solid black;
+  border: 5px solid black;
   background-color: white;
+}
+
+  #msgInput:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: none;
 }
 
 
@@ -1314,7 +1930,7 @@ margin-left: 2vw;
   position: relative;
   color: black;
   background-color: #52a6f4;
-  border: 3px solid black;
+  border: 5px solid black;
   font-family: "pixel";
   font-size: 30pt;
   cursor: pointer;
@@ -1380,7 +1996,7 @@ margin-left: 2vw;
   border: 0px solid #000000;
   margin-bottom: 10px;
   scrollbar-width: thin;
-  height: 5vh;
+  height: 6vh;
   justify-content: space-evenly;
   transform: translateY(2vh);
   z-index: 50;
@@ -1545,6 +2161,7 @@ margin-left: 2vw;
   width: 80vw;
   height: 80vh;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 0px;
   border: 10px solid black;
@@ -1573,7 +2190,7 @@ margin-left: 2vw;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* responsive */
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 55px;
 }
 
 
