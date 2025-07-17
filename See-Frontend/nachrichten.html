@@ -333,6 +333,8 @@
     <input id="sBahnTrigger" type="button" onclick="play()">
     <audio id="audio" src="http://localhost:3000/tuersignal.mp3"></audio>
 
+    
+
   <div id="nachtOverlay"></div>
 
 
@@ -367,7 +369,7 @@
             left: 0;
             width: 100vw;
             height: 50vh; /* gleiche Höhe wie das Wasser */
-            background: rgba(0, 0, 0, 0.2); /* halbtransparent schwarz */
+            background: rgba(94, 0, 157, 0.374); /* halbtransparent schwarz */
             pointer-events: none; /* lässt Klicks durch */
             z-index: 2; /* über dem Wasser, unter UI */
             display: absolute; /* nur nachts anzeigen */
@@ -583,7 +585,7 @@
     <div id="archivX">
       <img src="http://localhost:3000/x.png">
     </div>
-    <input type="text" id="archivSearch" placeholder="Nach Absender Suchen">
+    <input type="text" id="archivSearch" placeholder="Nach Absender oder Inhalt suchen">
   </div>
     
 
@@ -653,8 +655,9 @@
 
           #sonne, #mond {
             position: absolute;
-            width: 120px;
-            height: 120px;
+            width: 40px;
+            height: 40px;
+            
             
             border-radius: 50%;
             
@@ -666,7 +669,7 @@
             position: absolute;
             width: 100%;
             transform-origin: center;
-            transform: scale(3);
+            transform: scale(10);
 
             image-rendering: pixelated;
             image-rendering: crisp-edges;
@@ -746,6 +749,7 @@
     const info = document.getElementById("Info");
     const impressumOpen = document.getElementById("impressum");
     const archivSearch = document.getElementById("archivSearch");
+    
 
     
 
@@ -969,6 +973,11 @@ function loadMessages() {
           img.alt = `${msg.name} (${time.toLocaleString()})`;
           img.title = `${msg.name} (${time.toLocaleString()})`;
           img.style.cursor = "pointer";
+
+          img.addEventListener("mouseenter", () => {
+            const sound = new Audio("http://localhost:3000/pop.mp3");
+            sound.play();
+          });
 
           img.addEventListener("click", () => {
             startTypewriter(msg.msg);
@@ -1320,9 +1329,10 @@ archivSearch.addEventListener("input", () => {
     // Suchfeld leer: Alle Nachrichten anzeigen
     renderArchivCards(allMessages);
   } else {
-    // Filtere Nachrichten, nur wenn msg.name existiert, sonst leerer String
+    // Filtere nach Name ODER Nachrichtentext
     const filtered = allMessages.filter(msg =>
-      (msg.name || "").toLowerCase().includes(query)
+      (msg.name || "").toLowerCase().includes(query) ||
+      (msg.msg || "").toLowerCase().includes(query)
     );
     renderArchivCards(filtered);
   }
@@ -1354,9 +1364,9 @@ archivSearch.addEventListener("input", () => {
       const content = document.createElement("p");
       content.textContent = msg.msg;
 
-      const flasche = document.createElement("small");
-      flasche.classList.add("id-label");
-      flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
+      //const flasche = document.createElement("small");
+      //flasche.classList.add("id-label");
+      //flasche.innerHTML = `<br><br>Flaschenpost-ID: ${msg.idFlaschen}`;
 
       const AntwortenA = document.createElement("div");
       AntwortenA.innerHTML = "<b>Antworten:</b>";
@@ -1369,7 +1379,7 @@ archivSearch.addEventListener("input", () => {
       card.appendChild(content);
       card.appendChild(AntwortenA);
       card.appendChild(respBoxArch);
-      card.appendChild(flasche);
+      //card.appendChild(flasche);
 
       // Antworten laden
       fetch("http://localhost:3000/api/responses")
@@ -1404,6 +1414,7 @@ loadArchive();
  function updateGradient() {
       const now = new Date();
 const hour = now.getHours();
+const overlay = document.getElementById("nachtOverlay");
 
 let topColor, middleColor, bottomColor;
 
@@ -1413,7 +1424,8 @@ if (hour < 6) {
   middleColor = '#3C3356';
   bottomColor = '#3C3356';
 
-  impressumOpen.style.color = "#ffffff"
+  impressumOpen.style.color = "#ffffff";
+  overlay.style.display = "absolute";
 
 } else if (hour < 8) {
   // Morgen
@@ -1421,7 +1433,8 @@ if (hour < 6) {
   middleColor = '#FF723A';
   bottomColor = '#FF723A';
 
-  impressumOpen.style.color = "#000000"
+  impressumOpen.style.color = "#ffffff"
+  overlay.style.display = "none";
 
 } else if (hour < 20) { //20
   // Mittag
@@ -1430,6 +1443,7 @@ if (hour < 6) {
   bottomColor = '#C1F4FF';
 
   impressumOpen.style.color = "#000000"
+  overlay.style.display = "none";
 
 } else if (hour < 22) {
   // Abend
@@ -1437,7 +1451,8 @@ if (hour < 6) {
   middleColor = '#FF723A';
   bottomColor = '#FF723A';
 
-  impressumOpen.style.color = "#000000"
+  impressumOpen.style.color = "#ffffff"
+  overlay.style.display = "none";
   
 } else {
   // Nacht
@@ -1446,6 +1461,7 @@ if (hour < 6) {
   bottomColor = '#3C3356';
 
   impressumOpen.style.color = "#ffffff"
+  overlay.style.display = "absolute";
 }
 
 document.body.style.background = `
@@ -1458,45 +1474,53 @@ document.body.style.background = `
 
     // Aktualisiere den Farbverlauf jede Minute
     updateGradient();
+    setInterval(updateGradient, 60000); // jede Minute neu prüfen
 
+function updateCelestials() {
+  const sun = document.getElementById("sonne");
+  const moon = document.getElementById("mond");
+  const stars = document.getElementById("sterne");
 
-  function updateCelestials() {
-    const sun = document.getElementById("sonne");
-    const moon = document.getElementById("mond");
-    const now = new Date();
-    const hour = now.getHours() + now.getMinutes() / 60;
+  const now = new Date();
+  const hour = now.getHours() + now.getMinutes() / 60;
 
-    const horizonY = window.innerHeight * 0.5;
-    const maxArcHeight = horizonY - 100;
+  const horizonY = window.innerHeight * 0.5;
+  const maxArcHeight = horizonY - 100;
 
-    // Sonne
-    if (hour >= 6 && hour <= 22) {
-      const percent = (hour - 6) / 12;
-      const arc = Math.sin(percent * Math.PI);
-      const sunY = horizonY - (arc * maxArcHeight) - 40;
-      sun.style.top = `${sunY}px`;
-      sun.style.display = "block";
-      moon.style.display = "none";
+  // Tag: Sonne von 6–22 Uhr
+  if (hour >= 6 && hour < 21) {
+    const percent = (hour - 6) / 15; // 6–22 Uhr = 16 Stunden → 0–1
+    const arc = Math.sin(percent * Math.PI); // Bogenbewegung
+    const sunY = horizonY - (arc * maxArcHeight) - 40;
+
+    sun.style.top = `${sunY}px`;
+    sun.style.display = "block";
+
+    moon.style.display = "none";
+    stars.style.display = "none";
+  } 
+  // Nacht: Mond von 22–6 Uhr
+  else {
+    let percent;
+    if (hour >= 22) {
+      percent = (hour - 22) / 8;  // 22–24 Uhr → 0–0.25
+    } else {
+      percent = (hour + 2) / 8;   // 0–6 Uhr → 0.25–1
     }
-    // Mond
-    else {
-      let percent;
-      if (hour > 22) {
-        percent = (hour - 22) / 12; // 18–24 → 0–0.5
-      } else {
-        percent = (hour + 6) / 12;  // 0–6 → 0.5–1
-      }
-      const arc = Math.sin(percent * Math.PI);
-      const moonY = horizonY - (arc * maxArcHeight) - 40;
-      moon.style.top = `${moonY}px`;
-      moon.style.display = "block";
-      sun.style.display = "none";
-    }
+    const arc = Math.sin(percent * Math.PI);
+    const moonY = horizonY - (arc * maxArcHeight) - 40;
+
+    moon.style.top = `${moonY}px`;
+    moon.style.display = "block";
+
+    sun.style.display = "none";
+    stars.style.display = "block";
   }
+}
 
-  updateCelestials();
-  setInterval(updateCelestials, 60 * 1000); // jede Minute aktualisieren
-
+// Initial aufrufen und jede Minute aktualisieren
+updateCelestials();
+setInterval(updateCelestials, 60 * 1000);
 
   function isNightTime() {
   const hour = new Date().getHours();
